@@ -1,0 +1,16 @@
+
+#contenido{width: 40%;
+                margin: 0px auto;
+                margin-top: 4%;
+                -webkit-box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75);
+                box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75); padding:2em;
+                background-color: #f5f5f5;}
+.datosEmpresa{
+    font-size: 19px;
+    height: 50%;
+}
+#texto_centrado{text-align: center;}
+#lista_especialidades{width: 50%;}
+
+
