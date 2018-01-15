@@ -25,6 +25,27 @@ function cargarTitulo() {
         }
     }
 }
+function cargarMedicos_especialidad(especialidad) {
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetMedicosEspecialidad.php?especialidad='" + especialidad + "'");
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            mostrarMedicos();
+        }
+    }
+}
+function mostrarMedicos() {
+    var datos = objetoAjax.responseText;
+    var objeto = JSON.parse(datos);
+    var list = document.getElementById("lista_medicos");
+    borrarHijos(list);
+    for (var i = 0; i < objeto.length; i++) {
+        var option = document.createElement("option");
+        option.innerHTML = objeto[i].nombre;
+        list.appendChild(option);
+    }
+}
 function borrarPadre() {
     var padre = document.getElementById("padre");
     if (padre.hasChildNodes())
@@ -35,8 +56,18 @@ function borrarPadre() {
         }
     }
 }
+function borrarHijos(nodo) {
+    if (nodo.hasChildNodes())
+    {
+        while (nodo.childNodes.length >= 1)
+        {
+            nodo.removeChild(nodo.firstChild);
+        }
+    }
+}
 function mostrarInterfazConsulta() {
     borrarPadre();
+    //Lista especialidades
     var contenido = document.createElement("div");
     contenido.setAttribute("id", "contenido");
 
@@ -55,13 +86,30 @@ function mostrarInterfazConsulta() {
     var label = document.createElement("label");
     label.setAttribute("for", "sel1");
     label.innerHTML = "Seleccione una especialidad:";
-    contenido.appendChild(label);
+    div.appendChild(label);
 
     var select = document.createElement("select");
     select.setAttribute("class", "form-control");
     select.setAttribute("name", "lista_especialidades");
     select.setAttribute("id", "lista_especialidades");
-    contenido.appendChild(select);
+    select.setAttribute("onChange", "cargarMedicos_especialidad(this.value)");
+    div.appendChild(select);
+
+    //Lista medicos
+    var div = document.createElement("div");
+    div.setAttribute("class", "form-group");
+    contenido.appendChild(div);
+
+    var label = document.createElement("label");
+    label.setAttribute("for", "sel1");
+    label.innerHTML = "Seleccione un medico:";
+    div.appendChild(label);
+
+    var select = document.createElement("select");
+    select.setAttribute("class", "form-control");
+    select.setAttribute("name", "lista_especialidades");
+    select.setAttribute("id", "lista_medicos");
+    div.appendChild(select);
 
     document.getElementById("padre").appendChild(contenido);
 
@@ -89,6 +137,7 @@ function mostrarEspecialidades() {
         option.innerHTML = objeto[i];
         list.appendChild(option);
     }
+    cargarMedicos_especialidad(objeto[0]);
 }
 function mostrarDatosEmpresa() {
     var datos = objetoAjax.responseText;
@@ -119,9 +168,9 @@ function mostrarDatosEmpresa() {
     correo.innerHTML = "Dirección:  ";
     datosEmpresa.appendChild(correo);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.direccion + "<br>";
-    
+
     var divContenido = document.createElement("div");
-    divContenido.setAttribute("id","contenido");
+    divContenido.setAttribute("id", "contenido");
     divContenido.appendChild(datosEmpresa);
     document.getElementById("padre").appendChild(divContenido);
 }
