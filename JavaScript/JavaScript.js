@@ -1,16 +1,5 @@
+/* FUNCIONES DE INICIO */
 
-function cargarDatosEmpresa() {
-    borrarPadre();
-    objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', 'php/GetDatosEmpresa.php');
-    objetoAjax.send();
-    objetoAjax.onreadystatechange = function () {
-        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            mostrarDatosEmpresa();
-
-        }
-    }
-}
 function cargarTitulo() {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', 'php/GetDatosEmpresa.php');
@@ -25,6 +14,9 @@ function cargarTitulo() {
         }
     }
 }
+
+/*FUNCIONES DE CONSULTA */
+
 function cargarMedicos_especialidad(especialidad) {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', "php/GetMedicosEspecialidad.php?especialidad='" + especialidad + "'");
@@ -45,31 +37,16 @@ function mostrarMedicos() {
         option.innerHTML = objeto[i].nombre;
         list.appendChild(option);
     }
-}
-function borrarPadre() {
-    var padre = document.getElementById("padre");
-    if (padre.hasChildNodes())
-    {
-        while (padre.childNodes.length >= 1)
-        {
-            padre.removeChild(padre.firstChild);
-        }
-    }
-}
-function borrarHijos(nodo) {
-    if (nodo.hasChildNodes())
-    {
-        while (nodo.childNodes.length >= 1)
-        {
-            nodo.removeChild(nodo.firstChild);
-        }
-    }
+    cargar_datosMedico(objeto.indexOf(0).nombre);
 }
 function mostrarInterfazConsulta() {
     borrarPadre();
     //Lista especialidades
     var contenido = document.createElement("div");
     contenido.setAttribute("id", "contenido");
+
+    var divInputs = document.createElement("div");
+    divInputs.setAttribute("class", "divInputs");
 
     var h2 = document.createElement("h2");
     h2.setAttribute("id", "texto_centrado");
@@ -79,9 +56,11 @@ function mostrarInterfazConsulta() {
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
 
+    contenido.appendChild(divInputs);
+
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
-    contenido.appendChild(div);
+    divInputs.appendChild(div);
 
     var label = document.createElement("label");
     label.setAttribute("for", "sel1");
@@ -98,7 +77,7 @@ function mostrarInterfazConsulta() {
     //Lista medicos
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
-    contenido.appendChild(div);
+    divInputs.appendChild(div);
 
     var label = document.createElement("label");
     label.setAttribute("for", "sel1");
@@ -109,11 +88,22 @@ function mostrarInterfazConsulta() {
     select.setAttribute("class", "form-control");
     select.setAttribute("name", "lista_especialidades");
     select.setAttribute("id", "lista_medicos");
+    select.setAttribute("onChange", "cargar_datosMedico(this.value)");
     div.appendChild(select);
 
     document.getElementById("padre").appendChild(contenido);
 
     cargarEspecialidades();
+}
+function cargar_datosMedico(medico) {
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?medico=" + medico);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            alert(objetoAjax.responseText);
+        }
+    }
 }
 
 function cargarEspecialidades() {
@@ -138,6 +128,19 @@ function mostrarEspecialidades() {
         list.appendChild(option);
     }
     cargarMedicos_especialidad(objeto[0]);
+}
+/* FUNCIONES DE CONTACTO */
+function cargarDatosEmpresa() {
+    borrarPadre();
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', 'php/GetDatosEmpresa.php');
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            mostrarDatosEmpresa();
+
+        }
+    }
 }
 function mostrarDatosEmpresa() {
     var datos = objetoAjax.responseText;
@@ -174,6 +177,8 @@ function mostrarDatosEmpresa() {
     divContenido.appendChild(datosEmpresa);
     document.getElementById("padre").appendChild(divContenido);
 }
+
+/* FUNCIONES GENERICAS*/
 function AJAXCrearObjeto() {
     if (window.XMLHttpRequest) {
 // navegadores que siguen los estándares
@@ -183,4 +188,24 @@ function AJAXCrearObjeto() {
         objetoAjax = new ActiveXObject("Microsoft.XMLHTTP");
     }
     return objetoAjax;
+}
+
+function borrarPadre() {
+    var padre = document.getElementById("padre");
+    if (padre.hasChildNodes())
+    {
+        while (padre.childNodes.length >= 1)
+        {
+            padre.removeChild(padre.firstChild);
+        }
+    }
+}
+function borrarHijos(nodo) {
+    if (nodo.hasChildNodes())
+    {
+        while (nodo.childNodes.length >= 1)
+        {
+            nodo.removeChild(nodo.firstChild);
+        }
+    }
 }
