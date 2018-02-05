@@ -111,7 +111,7 @@ CREATE TABLE `especialidades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `especialidades` (
 
 LOCK TABLES `especialidades` WRITE;
 /*!40000 ALTER TABLE `especialidades` DISABLE KEYS */;
-INSERT INTO `especialidades` VALUES (1,'Cirujanos'),(2,'Anatomopatólogos'),(3,'Acupuntores'),(4,'Ginecólogos y Obstetras'),(5,'Endocrinos'),(6,'Digestivos'),(7,'Neurólogos'),(8,'Nefrólogos'),(9,'Medicina interna'),(10,'Oncólogos'),(11,'Pediatras'),(12,'Otorrinos'),(13,'Traumatólogos'),(14,'Tratamiento del dolor'),(15,'Radioterapia');
+INSERT INTO `especialidades` VALUES (1,'Cirujanos'),(2,'Anatomopatólogos'),(3,'Acupuntores'),(5,'Endocrinos'),(6,'Digestivos'),(7,'Neurólogos');
 /*!40000 ALTER TABLE `especialidades` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +179,7 @@ CREATE TABLE `medicos` (
 
 LOCK TABLES `medicos` WRITE;
 /*!40000 ALTER TABLE `medicos` DISABLE KEYS */;
-INSERT INTO `medicos` VALUES (5,'Juan Ramon',1,'J.ramon@gmail.com','C/Iniesta N 10','13230732M'),(6,'Daniel Fernandez',3,'D.fernandez@gmail.com','C/Base N2','75120824H'),(7,'Cristina Garcia',5,'C.garcia@gmail.com','C/Albacete n9','90461510A'),(8,'Alberto Cebrian',4,'A.cebrian@gmail.com','C/Alicante n10','33167959G'),(9,'Maria Del Carmen Tarancon',4,'M.carmen@gmail.com','C/Barcelona n20','30610886W');
+INSERT INTO `medicos` VALUES (5,'Juan Ramon',1,'J.ramon@gmail.com','C/Iniesta N 10','13230732M'),(6,'Daniel Fernandez',3,'D.fernandez@gmail.com','C/Base N2','75120824H'),(7,'Cristina Garcia',3,'C.garcia@gmail.com','C/Albacete n9','90461510A'),(8,'Alberto Cebrian',5,'A.cebrian@gmail.com','C/Alicante n10','33167959G'),(9,'Maria Del Carmen Tarancon',5,'M.carmen@gmail.com','C/Barcelona n20','30610886W');
 /*!40000 ALTER TABLE `medicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +251,7 @@ CREATE TABLE `usuarios` (
   `nif` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `password` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,6 +260,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'Juan Ramon','J.ramon@gmail.com','C/Iniesta N 10','654347213','13230732M','1234');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -280,4 +281,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-24 13:01:20
+-- Dump completed on 2018-01-31 17:52:08
