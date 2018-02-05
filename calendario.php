@@ -7,7 +7,6 @@ and open the template in the editor.
 <html>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
         <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -25,9 +24,8 @@ and open the template in the editor.
         <script src="JavaScript/JavaScript_Calendario.js" type="text/javascript"></script>
 
         <script>
-
+            cargarMedicos();
             $(document).ready(function () {
-
                 $('#calendar').fullCalendar({
                     defaultDate: '2018-01-12',
                     editable: true,
@@ -36,12 +34,11 @@ and open the template in the editor.
                         añadirDia(date);
                         // change the day's background color just for fun
                         $(this).css('background-color', 'red');
+
                     }
 
                 });
-
             });
-
         </script>
         <style>
 
@@ -58,14 +55,17 @@ and open the template in the editor.
             }
 
         </style>
-        <?php $nombreMedico = $_REQUEST['medico']; ?>
     </head>
     <body onload="crearArrayDias()">
-        <h2 id="titulo"></h2>
+        <h2 id="titulo">Medico: <select id="medicos" onchange="cargarDiasMedico(this.value);">
+            </select>
+        </h2>
         <h3 id="titulo">Por favor seleccione los dias libres</h3>
-        <div id="calendar">
-        </div>
-        <script> introducirNombreMedico(<?php echo $nombreMedico ?>);</script> 
-
+        <main class="calendario_main">
+            <a href="index.html"><button type="button" class="btn btn-primary">Volver</button></a>
+            <button type="button" id="boton_confirmar" class="btn btn-success btn-lg" onclick="guardarDiasLibres();">Confirmar dias</button>
+            <div id="calendar">     
+            </div>
+        </main>
     </body>
 </html>

@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `bd_clinica` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci */;
-USE `bd_clinica`;
--- MySQL dump 10.13  Distrib 5.7.20, for macos10.12 (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: bd_clinica
 -- ------------------------------------------------------
--- Server version	5.7.20
+-- Server version	10.1.28-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +14,67 @@ USE `bd_clinica`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `agenda`
+--
+
+DROP TABLE IF EXISTS `agenda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agenda` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idMedico` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `tramoHora` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `idCita` int(11) NOT NULL,
+  `laboral` enum('SI','NO') COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idCita_agenda_idx` (`idCita`),
+  KEY `idMedico_agenda_idx` (`idMedico`),
+  CONSTRAINT `idCita_agenda` FOREIGN KEY (`idCita`) REFERENCES `citas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `idMedico_agenda` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `agenda`
+--
+
+LOCK TABLES `agenda` WRITE;
+/*!40000 ALTER TABLE `agenda` DISABLE KEYS */;
+/*!40000 ALTER TABLE `agenda` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bajacitas`
+--
+
+DROP TABLE IF EXISTS `bajacitas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bajacitas` (
+  `id` int(11) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `idMedico` int(11) NOT NULL,
+  `fechCita` datetime NOT NULL,
+  `hora` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_medico_cita_idx` (`idMedico`),
+  KEY `id_usuario_citaBaja_idx` (`idUsuario`),
+  CONSTRAINT `id_medico_citaBaja` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `id_usuario_citaBaja` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bajacitas`
+--
+
+LOCK TABLES `bajacitas` WRITE;
+/*!40000 ALTER TABLE `bajacitas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bajacitas` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `citas`
@@ -75,6 +134,29 @@ INSERT INTO `clinica` VALUES (1,'Garcia','967483265','garcia@clinica.com','C/Bue
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dias`
+--
+
+DROP TABLE IF EXISTS `dias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dias` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dia` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dias`
+--
+
+LOCK TABLES `dias` WRITE;
+/*!40000 ALTER TABLE `dias` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dias` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `diaslibres`
 --
 
@@ -120,8 +202,37 @@ CREATE TABLE `especialidades` (
 
 LOCK TABLES `especialidades` WRITE;
 /*!40000 ALTER TABLE `especialidades` DISABLE KEYS */;
-INSERT INTO `especialidades` VALUES (1,'Cirujanos'),(2,'Anatomopatólogos'),(3,'Acupuntores'),(5,'Endocrinos'),(6,'Digestivos'),(7,'Neurólogos');
+INSERT INTO `especialidades` VALUES (1,'Cirujanos'),(3,'Acupuntores');
 /*!40000 ALTER TABLE `especialidades` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `horarios`
+--
+
+DROP TABLE IF EXISTS `horarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `horarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idMedico` int(11) NOT NULL,
+  `dia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `horaInicioHorario` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `horaFinalHorario` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_medico_idx` (`idMedico`),
+  KEY `id_medico_horario_idx` (`idMedico`),
+  CONSTRAINT `id_medico_horario` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `horarios`
+--
+
+LOCK TABLES `horarios` WRITE;
+/*!40000 ALTER TABLE `horarios` DISABLE KEYS */;
+/*!40000 ALTER TABLE `horarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -179,7 +290,7 @@ CREATE TABLE `medicos` (
 
 LOCK TABLES `medicos` WRITE;
 /*!40000 ALTER TABLE `medicos` DISABLE KEYS */;
-INSERT INTO `medicos` VALUES (5,'Juan Ramon',1,'J.ramon@gmail.com','C/Iniesta N 10','13230732M'),(6,'Daniel Fernandez',3,'D.fernandez@gmail.com','C/Base N2','75120824H'),(7,'Cristina Garcia',3,'C.garcia@gmail.com','C/Albacete n9','90461510A'),(8,'Alberto Cebrian',5,'A.cebrian@gmail.com','C/Alicante n10','33167959G'),(9,'Maria Del Carmen Tarancon',5,'M.carmen@gmail.com','C/Barcelona n20','30610886W');
+INSERT INTO `medicos` VALUES (5,'Juan Ramon',1,'J.ramon@gmail.com','C/Iniesta N 10','13230732M'),(6,'Daniel Fernandez',3,'D.fernandez@gmail.com','C/Base N2','75120824H'),(7,'Cristina Garcia',3,'C.garcia@gmail.com','C/Albacete n9','90461510A');
 /*!40000 ALTER TABLE `medicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +371,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Juan Ramon','J.ramon@gmail.com','C/Iniesta N 10','654347213','13230732M','1234');
+INSERT INTO `usuarios` VALUES (1,'Admin','Admin@gmail.com','C/Iniesta N 10','654347213','13230732M','1234');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,4 +392,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-31 17:52:08
+-- Dump completed on 2018-02-05 23:09:29

@@ -92,15 +92,22 @@ function mostrarInterfazConsulta() {
     select.setAttribute("id", "lista_medicos");
     select.setAttribute("onChange", "cargar_datosMedico(this.value)");
     div.appendChild(select);
-
+    
+    var boton = document.createElement("button");
+    boton.setAttribute("class", "btn btn-primary");
+    boton.setAttribute("style","margin:20px;");
+    boton.innerHTML = "Aceptar";
+    div.appendChild(boton);
+    
     document.getElementById("padre").appendChild(contenido);
 
     var divInputs = document.createElement("div");
     divInputs.setAttribute("class", "divInputs2");
     divInputs.setAttribute("id", "divMedico_datos");
-
     contenido.appendChild(divInputs);
+
     cargarEspecialidades();
+
 }
 function cargar_datosMedico(medico) {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
@@ -132,10 +139,6 @@ function mostrarDatosMedicos() {
     }
 
     contenido.appendChild(divInputs);
-    var boton = document.createElement("button");
-    boton.setAttribute("class", "btn btn-primary");
-    boton.innerHTML = "Aceptar";
-    contenido.appendChild(boton);
 
 
 
@@ -148,9 +151,9 @@ function cargarEspecialidades() {
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             mostrarEspecialidades();
-
         }
     }
+
 }
 function mostrarEspecialidades() {
     var datos = objetoAjax.responseText;
@@ -242,7 +245,7 @@ function mostrarInterfazPanelControl() {
     input.setAttribute("id", "email");
     input.setAttribute("placeholder", "Introduce tu correo");
     input.setAttribute("name", "usuario");
-    input.setAttribute("value", "J.ramon@gmail.com");
+    input.setAttribute("value", "Admin@gmail.com");
     div.appendChild(input);
     form.appendChild(div);
 
@@ -260,8 +263,13 @@ function mostrarInterfazPanelControl() {
     input.setAttribute("class", "form-control");
     input.setAttribute("id", "pwd");
     input.setAttribute("placeholder", "Introduce contraseña");
-    input.setAttribute("name", "usuario");
+    input.setAttribute("name", "pass");
+    input.setAttribute("value","1234");
     div.appendChild(input);
+    var small = document.createElement("small");
+    small.setAttribute("class","form-text text-muted");
+    small.innerHTML = "La contraseña del administrador es 1234 NOTA:Esto se borrará en la versión final";
+    div.appendChild(small);
     form.appendChild(div);
 
     var boton = document.createElement("button");
@@ -278,7 +286,6 @@ function mostrarInterfazPanelControl() {
 
 
 }
-/*FUNCIONES PANEL DE CONTROL */
 function compruebaDatos_inicioSesion() {
     var usuario = document.getElementById("email").value;
     var pass = document.getElementById("pwd").value;
@@ -288,7 +295,7 @@ function compruebaDatos_inicioSesion() {
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             if (objetoAjax.responseText !== "null") {
-                location.href = "calendario.php?medico=" + objetoAjax.responseText;
+                location.href = "calendario.php?medico";
             }
         }
     }
