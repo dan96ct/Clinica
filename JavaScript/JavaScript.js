@@ -92,13 +92,13 @@ function mostrarInterfazConsulta() {
     select.setAttribute("id", "lista_medicos");
     select.setAttribute("onChange", "cargar_datosMedico(this.value)");
     div.appendChild(select);
-    
+
     var boton = document.createElement("button");
     boton.setAttribute("class", "btn btn-primary");
-    boton.setAttribute("style","margin:20px;");
+    boton.setAttribute("style", "margin:20px;");
     boton.innerHTML = "Aceptar";
     div.appendChild(boton);
-    
+
     document.getElementById("padre").appendChild(contenido);
 
     var divInputs = document.createElement("div");
@@ -195,19 +195,22 @@ function mostrarDatosEmpresa() {
     hr.setAttribute("size", "1px");
     datosEmpresa.appendChild(hr);
 
-    var telefono = document.createElement("label");
-    telefono.innerHTML = "Telefono: ";
-    datosEmpresa.appendChild(telefono);
+    var img = document.createElement("img");
+    img.setAttribute("src", "Imagenes/telefonoICON.png");
+    img.setAttribute("class", "icon_contacto");
+    datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.telefono + "<br>";
 
-    var correo = document.createElement("label");
-    correo.innerHTML = "Correo:  ";
-    datosEmpresa.appendChild(correo);
+    var img = document.createElement("img");
+    img.setAttribute("src", "Imagenes/EmailICON.png");
+    img.setAttribute("class", "icon_contacto");
+    datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.correo + "<br>";
 
-    var correo = document.createElement("label");
-    correo.innerHTML = "Dirección:  ";
-    datosEmpresa.appendChild(correo);
+    var img = document.createElement("img");
+    img.setAttribute("src", "Imagenes/home-512.png");
+    img.setAttribute("class", "icon_contacto");
+    datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.direccion + "<br>";
 
     var divContenido = document.createElement("div");
@@ -264,10 +267,10 @@ function mostrarInterfazPanelControl() {
     input.setAttribute("id", "pwd");
     input.setAttribute("placeholder", "Introduce contraseña");
     input.setAttribute("name", "pass");
-    input.setAttribute("value","1234");
+    input.setAttribute("value", "1234");
     div.appendChild(input);
     var small = document.createElement("small");
-    small.setAttribute("class","form-text text-muted");
+    small.setAttribute("class", "form-text text-muted");
     small.innerHTML = "La contraseña del administrador es 1234 NOTA:Esto se borrará en la versión final";
     div.appendChild(small);
     form.appendChild(div);

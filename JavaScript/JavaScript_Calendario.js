@@ -10,7 +10,7 @@ function crearArrayDias() {
     arrayDias = [];
 }
 function añadirDia(dia) {
-    
+
     arrayDias.push(dia);
 }
 function mostrarArray() {
@@ -27,6 +27,7 @@ function cargarMedicos() {
     }
 }
 function cargarDiasMedico(medico) {
+    arrayDias = []; //Reseteamos el array de dias para que no se mezclen con otro medico
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
     objetoAjax.send();
@@ -58,13 +59,18 @@ function mostrarDiasCalendario(num) {
     });
 }
 function guardarDiasLibres() {
-    var nombreMedico = document.getElementById("medicos").value;
-    var jsonDias = JSON.stringify(arrayDias);
-    objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GuardarDiasLibresMedico.php?medico="+nombreMedico+"&jsonDias="+jsonDias);
-    objetoAjax.send();
-    objetoAjax.onreadystatechange = function () {
-        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+    if (arrayDias.length == 0) {
+        alert("No has seleccionado ningun dia");
+    } else {
+        var nombreMedico = document.getElementById("medicos").value;
+        var jsonDias = JSON.stringify(arrayDias);
+        objetoAjax = AJAXCrearObjeto(); //crea el objeto
+        objetoAjax.open('GET', "php/GuardarDiasLibresMedico.php?medico=" + nombreMedico + "&jsonDias=" + jsonDias);
+        objetoAjax.send();
+        objetoAjax.onreadystatechange = function () {
+            if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+                alert("los dias se han introducido correctamente");
+            }
         }
     }
 }
