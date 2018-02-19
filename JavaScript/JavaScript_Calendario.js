@@ -46,21 +46,26 @@ function mostrarDiasCalendario() {
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         dayClick: function (date, jsEvent, view) {
+            var miDia = new Date();
+            if (date > miDia) {
                 añadirDia(date);
                 for (var i = 0; i < objeto.length; i++) {
                     if (date.day() == pasar_a_numero(objeto[i].dia)) {
                         $(this).css('background-color', 'red');
                     }
                 }
+            }
         }, dayRender: function (date, cell) {
             cell.css("background-color", "white");
-            for (var i = 0; i < objeto.length; i++) {
-                if (date.day() == pasar_a_numero(objeto[i].dia)) {
-                    cell.css("background-color", "green");
+            var miDia = new Date();
+            if (date > miDia) {
+                for (var i = 0; i < objeto.length; i++) {
+                    if (date.day() == pasar_a_numero(objeto[i].dia)) {
+                        cell.css("background-color", "green");
+                    }
                 }
             }
-        }
-    });
+        }});
 }
 function guardarDiasLibres() {
     if (arrayDias.length == 0) {

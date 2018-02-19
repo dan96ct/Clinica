@@ -138,8 +138,11 @@ function interfazElegirCita() {
     contenido.appendChild(div2);
     var h2 = $("<h2>Cita para: " + medico + "</h2>");
     $('.informacion_turnos').append(h2);
-    var select = $('<select id="lista_horas" ></select>');
+    var select = $('<select id="lista_horas"></select>');
+    $('.informacion_turnos').append('<h3>Seleccione un horario</h3>');
     $('.informacion_turnos').append(select);
+    $('.informacion_turnos').append('<br><button style="margin-top:20px;" type="button" class="btn btn-primary">Confirmar</button>');
+
     cargar_diasLaborables(medico);
 
 }
@@ -168,8 +171,8 @@ function cargarDiasLibres(medico) {
             var objeto = JSON.parse(datos);
             if (objeto !== null) {
                 arrayDiasLibres = objeto;
-            }else{
-                arrayDiasLibres = {'diasLibres':'0'};
+            } else {
+                arrayDiasLibres = {'diasLibres': '0'};
             }
             $('#calendar_1').fullCalendar('destroy');
             $('#calendar_1').fullCalendar({
@@ -177,35 +180,41 @@ function cargarDiasLibres(medico) {
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
                 dayClick: function (date, jsEvent, view) {
-                    for (var i = 0; i < arrayDiasLaborables.length; i++) {
-                        if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
-                            var validar = true;
-                            for (var f = 0; f < arrayDiasLibres.length; f++) {
-                                if (date.format('YYYY-MM-DD') === arrayDiasLibres[f].diasLibres) {
-                                    validar = false;
-                                    break;
+                    var miDia = new Date();
+                    if (date > miDia) {
+                        for (var i = 0; i < arrayDiasLaborables.length; i++) {
+                            if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
+                                var validar = true;
+                                for (var f = 0; f < arrayDiasLibres.length; f++) {
+                                    if (date.format('YYYY-MM-DD') === arrayDiasLibres[f].diasLibres) {
+                                        validar = false;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (validar === true) {
-                                if (diaSeleccionado_objeto !== "") {
-                                    diaSeleccionado_objeto.css('background-color', 'green');
+                                if (validar === true) {
+                                    if (diaSeleccionado_objeto !== "") {
+                                        diaSeleccionado_objeto.css('background-color', 'green');
+                                    }
+                                    $(this).css('background-color', '#00FFBD');
+                                    diaSeleccionado_objeto = $(this);
+                                    diaSeleccionado_string = date.format('YYYY-MM-DD');
+                                    cargarHorarioDia(medico);
                                 }
-                                $(this).css('background-color', '#00FFBD');
-                                diaSeleccionado_objeto = $(this);
-                                diaSeleccionado_string = date.format('YYYY-MM-DD');
-                                cargarHorarioDia(medico);
                             }
                         }
                     }
                 },
                 dayRender: function (date, cell) {
                     cell.css("background-color", "white");
+                    var miDia = new Date();
                     for (var i = 0; i < arrayDiasLaborables.length; i++) {
-                        if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
-                            cell.css("background-color", "green");
-                            for (var f = 0; f < arrayDiasLibres.length; f++) {
-                                if (date.format('YYYY-MM-DD') == arrayDiasLibres[f].diasLibres) {
-                                    cell.css("background-color", "white");
+                        if (date > miDia) {
+                            if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
+                                cell.css("background-color", "green");
+                                for (var f = 0; f < arrayDiasLibres.length; f++) {
+                                    if (date.format('YYYY-MM-DD') == arrayDiasLibres[f].diasLibres) {
+                                        cell.css("background-color", "white");
+                                    }
                                 }
                             }
                         }
@@ -218,12 +227,20 @@ function cargarDiasLibres(medico) {
 }
 function cargarHorarioDia(medico) {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetHorarioDia.php?medico='" + medico + "'&dia='" + diaSeleccionado_string + "'");
+    objetoAjax.open('GET', "php/GetHorarioDia.php?medico=" + medico + "&dia='" + diaSeleccionado_string + "'");
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            
+            mostrarHorarioDia();
         }
+    }
+}
+function mostrarHorarioDia() {
+    var datos = objetoAjax.responseText;
+    var objeto = JSON.parse(datos);
+    $('#lista_horas').empty();
+    for (var i = 0; i < objeto.length; i++) {
+        $('#lista_horas').append('<option>' + objeto[i].tramoInicio + ' - ' + objeto[i].tramoFinal + '</option>')
     }
 }
 function cargar_datosMedico(medico) {

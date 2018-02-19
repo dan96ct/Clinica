@@ -1,6 +1,7 @@
 
 #contenido{width: 80%;
-           min-height: 500px;
+           min-height: 600px;
+           max-width: 1200px;
            margin: 0px auto;
            margin-top: 4%;
            -webkit-box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75);
@@ -36,10 +37,10 @@
 }
 #calendar_1{
     width: 480px !important;
-    display: inline-block;
+    float:left;
 }
 .informacion_turnos{
-    display: inline-block;
+    float:left;
     text-align: center;
 }
 .icon_contacto{
@@ -48,5 +49,8 @@
 }
 .informacion_turnos{
     margin-left: 100px;   
+}
+#lista_horas{
+    font-size: 23px;
 }
 

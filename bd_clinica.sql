@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `bd_clinica` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci */;
 USE `bd_clinica`;
--- MySQL dump 10.13  Distrib 5.7.20, for macos10.12 (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: bd_clinica
 -- ------------------------------------------------------
--- Server version	5.7.20
+-- Server version	10.1.28-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -136,29 +136,6 @@ INSERT INTO `clinica` VALUES (1,'Garcia','967483265','garcia@clinica.com','C/Bue
 UNLOCK TABLES;
 
 --
--- Table structure for table `dias`
---
-
-DROP TABLE IF EXISTS `dias`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dias` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dia` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dias`
---
-
-LOCK TABLES `dias` WRITE;
-/*!40000 ALTER TABLE `dias` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dias` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `diaslibres`
 --
 
@@ -173,7 +150,7 @@ CREATE TABLE `diaslibres` (
   UNIQUE KEY `fechaLibre_UNIQUE` (`fechaLibre`,`idMedico`),
   KEY `id_medico_dialibre_idx` (`idMedico`),
   CONSTRAINT `id_medico_dialibre` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +240,7 @@ CREATE TABLE `horariosmedicos` (
 
 LOCK TABLES `horariosmedicos` WRITE;
 /*!40000 ALTER TABLE `horariosmedicos` DISABLE KEYS */;
-INSERT INTO `horariosmedicos` VALUES (4,5,2),(5,5,3),(6,5,4),(7,6,10),(8,6,11),(9,6,15),(10,7,12),(11,7,13),(12,7,14),(13,5,17),(14,5,20),(15,5,18);
+INSERT INTO `horariosmedicos` VALUES (4,5,2),(5,5,3),(6,5,4),(7,6,11),(8,6,11),(9,6,16),(10,7,12),(11,7,13),(12,7,14),(13,5,17),(14,5,21),(15,5,18);
 /*!40000 ALTER TABLE `horariosmedicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -305,13 +282,14 @@ DROP TABLE IF EXISTS `tramo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tramo` (
-  `id` int(11) NOT NULL,
-  `idTurno` int(11) DEFAULT NULL,
-  `tramo` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idTurno` int(11) NOT NULL,
+  `tramoInicio` time NOT NULL,
+  `tramoFinal` time NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_turno_idx` (`idTurno`),
   CONSTRAINT `id_turno` FOREIGN KEY (`idTurno`) REFERENCES `turnos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,6 +298,7 @@ CREATE TABLE `tramo` (
 
 LOCK TABLES `tramo` WRITE;
 /*!40000 ALTER TABLE `tramo` DISABLE KEYS */;
+INSERT INTO `tramo` VALUES (6,1,'09:00:00','09:30:00'),(7,1,'09:30:00','10:00:00'),(8,1,'10:00:00','10:30:00'),(9,1,'10:30:00','11:00:00'),(10,1,'11:00:00','11:30:00'),(11,1,'11:30:00','12:00:00'),(12,1,'12:00:00','12:30:00'),(13,2,'12:30:00','13:00:00'),(14,2,'13:30:00','14:00:00'),(15,2,'14:00:00','14:30:00'),(16,2,'14:30:00','15:00:00'),(17,3,'15:00:00','15:30:00'),(18,3,'15:30:00','16:00:00'),(19,3,'16:00:00','16:30:00'),(20,3,'16:30:00','18:00:00'),(21,4,'18:00:00','18:30:00'),(38,4,'18:30:00','19:00:00'),(39,4,'19:00:00','19:30:00'),(40,4,'19:30:00','20:00:00'),(41,4,'20:00:00','20:30:00'),(42,4,'20:30:00','21:00:00'),(43,4,'21:00:00','21:30:00'),(44,4,'21:30:00','22:00:00');
 /*!40000 ALTER TABLE `tramo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,4 +374,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-19 10:14:41
+-- Dump completed on 2018-02-19 23:41:34
