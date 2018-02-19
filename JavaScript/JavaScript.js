@@ -1,3 +1,8 @@
+
+var arrayDiasLaborables;
+var arrayDiasLibres;
+var diaSeleccionado_objeto = "";
+var diaSeleccionado_string = "";
 /* FUNCIONES DE INICIO */
 
 function cargarTitulo() {
@@ -96,6 +101,7 @@ function mostrarInterfazConsulta() {
     var boton = document.createElement("button");
     boton.setAttribute("class", "btn btn-primary");
     boton.setAttribute("style", "margin:20px;");
+    boton.setAttribute("onclick", "interfazElegirCita();");
     boton.innerHTML = "Aceptar";
     div.appendChild(boton);
 
@@ -108,6 +114,114 @@ function mostrarInterfazConsulta() {
 
     cargarEspecialidades();
 
+}
+
+function interfazElegirCita() {
+    var medico = document.getElementById("lista_medicos").value;
+    var contenido = document.getElementById("contenido");
+    borrarHijos(contenido);
+
+    var h2 = document.createElement("h2");
+    h2.setAttribute("id", "texto_centrado");
+    h2.innerHTML = "Seleccione el dia";
+    contenido.appendChild(h2);
+
+    var hr = document.createElement("hr");
+    contenido.appendChild(hr);
+
+    var div = document.createElement("div");
+    div.setAttribute("id", "calendar_1");
+    contenido.appendChild(div);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "informacion_turnos");
+    contenido.appendChild(div2);
+    var h2 = $("<h2>Cita para: " + medico + "</h2>");
+    $('.informacion_turnos').append(h2);
+    var select = $('<select id="lista_horas" ></select>');
+    $('.informacion_turnos').append(select);
+    cargar_diasLaborables(medico);
+
+}
+
+function cargar_diasLaborables(medico) {
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            var objeto = JSON.parse(datos);
+            arrayDiasLaborables = objeto;
+            cargarDiasLibres(medico);
+
+        }
+    }
+}
+function cargarDiasLibres(medico) {
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetDiasLibres.php?medico=" + medico);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            var objeto = JSON.parse(datos);
+            arrayDiasLibres = objeto;
+            alert(arrayDiasLibres[0].diasLibres);
+            $('#calendar_1').fullCalendar('destroy');
+            $('#calendar_1').fullCalendar({
+                defaultDate: '2018-01-12',
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                dayClick: function (date, jsEvent, view) {
+                    for (var i = 0; i < arrayDiasLaborables.length; i++) {
+                        if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
+                            var validar = true;
+                            for (var f = 0; f < arrayDiasLibres.length; f++) {
+                                if (date.format('YYYY-MM-DD') === arrayDiasLibres[f].diasLibres) {
+                                    validar = false;
+                                    break;
+                                }
+                            }
+                            if (validar === true) {
+                                if (diaSeleccionado_objeto !== "") {
+                                    diaSeleccionado_objeto.css('background-color', 'green');
+                                }
+                                $(this).css('background-color', '#00FFBD');
+                                diaSeleccionado_objeto = $(this);
+                                diaSeleccionado_string = date.format('YYYY-MM-DD');
+                                //cargarHorarioDia(medico);
+                            }
+                        }
+                    }
+                },
+                dayRender: function (date, cell) {
+                    cell.css("background-color", "white");
+                    for (var i = 0; i < arrayDiasLaborables.length; i++) {
+                        if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
+                            cell.css("background-color", "green");
+                            for (var f = 0; f < arrayDiasLibres.length; f++) {
+                                if (date.format('YYYY-MM-DD') == arrayDiasLibres[f].diasLibres) {
+                                    cell.css("background-color", "white");
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+}
+function cargarHorarioDia(medico) {
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetHorarioDia.php?medico='" + medico + "'&dia='" + diaSeleccionado_string + "'");
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            mostrarDatosMedicos();
+        }
+    }
 }
 function cargar_datosMedico(medico) {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
@@ -122,16 +236,12 @@ function cargar_datosMedico(medico) {
 function mostrarDatosMedicos() {
     var datos = objetoAjax.responseText;
     var objeto = JSON.parse(datos);
-
     var contenido = document.getElementById("contenido");
-
     var divInputs = document.getElementById("divMedico_datos");
     borrarHijos(divInputs);
-
     var h2 = document.createElement("h2");
     h2.innerHTML = objeto[0].nombre;
     divInputs.appendChild(h2);
-
     for (var i = 0; i < objeto.length; i++) {
         var p = document.createElement("p");
         p.innerHTML = objeto[i].dia + " de " + objeto[i].horaInicio + " a " + objeto[i].horaFinal;
@@ -139,9 +249,6 @@ function mostrarDatosMedicos() {
     }
 
     contenido.appendChild(divInputs);
-
-
-
 }
 
 function cargarEspecialidades() {
@@ -158,7 +265,6 @@ function cargarEspecialidades() {
 function mostrarEspecialidades() {
     var datos = objetoAjax.responseText;
     var objeto = JSON.parse(datos);
-
     var list = document.getElementById("lista_especialidades");
     for (var i = 0; i < objeto.length; i++) {
         var option = document.createElement("option");
@@ -176,7 +282,6 @@ function cargarDatosEmpresa() {
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             mostrarDatosEmpresa();
-
         }
     }
 }
@@ -185,34 +290,28 @@ function mostrarDatosEmpresa() {
     var objeto = JSON.parse(datos);
     var datosEmpresa = document.createElement("div");
     datosEmpresa.setAttribute("class", "datosEmpresa");
-
     var h2 = document.createElement("h2");
     h2.innerHTML = "Clinica " + objeto.nombre;
     h2.setAttribute("style", "text-align:center;");
     datosEmpresa.appendChild(h2);
-
     var hr = document.createElement("hr");
     hr.setAttribute("size", "1px");
     datosEmpresa.appendChild(hr);
-
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/telefonoICON.png");
     img.setAttribute("class", "icon_contacto");
     datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.telefono + "<br>";
-
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/EmailICON.png");
     img.setAttribute("class", "icon_contacto");
     datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.correo + "<br>";
-
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/home-512.png");
     img.setAttribute("class", "icon_contacto");
     datosEmpresa.appendChild(img);
     datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.direccion + "<br>";
-
     var divContenido = document.createElement("div");
     divContenido.setAttribute("id", "contenido");
     divContenido.appendChild(datosEmpresa);
@@ -228,20 +327,16 @@ function mostrarInterfazPanelControl() {
     var h2 = document.createElement("h2");
     h2.innerHTML = "Iniciar sesion";
     contenido.appendChild(h2);
-
     var form = document.createElement("form");
     form.setAttribute("action", "submit");
     contenido.appendChild(form);
-
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
     contenido.appendChild(div);
-
     var label = document.createElement("label");
     label.setAttribute("for", "email");
     label.innerHTML = "Usuario";
     div.appendChild(label);
-
     var input = document.createElement("input");
     input.setAttribute("type", "text");
     input.setAttribute("class", "form-control");
@@ -251,16 +346,13 @@ function mostrarInterfazPanelControl() {
     input.setAttribute("value", "Admin@gmail.com");
     div.appendChild(input);
     form.appendChild(div);
-
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
     contenido.appendChild(div);
-
     var label = document.createElement("label");
     label.setAttribute("for", "pwd");
     label.innerHTML = "Contraseña:";
     div.appendChild(label);
-
     var input = document.createElement("input");
     input.setAttribute("type", "password");
     input.setAttribute("class", "form-control");
@@ -274,7 +366,6 @@ function mostrarInterfazPanelControl() {
     small.innerHTML = "La contraseña del administrador es 1234 NOTA:Esto se borrará en la versión final";
     div.appendChild(small);
     form.appendChild(div);
-
     var boton = document.createElement("button");
     boton.setAttribute("class", "btn btn-primary btn-block");
     boton.addEventListener("click", function (event) {
@@ -283,11 +374,7 @@ function mostrarInterfazPanelControl() {
     });
     boton.innerHTML = "Aceptar";
     form.appendChild(boton);
-
     document.getElementById("padre").appendChild(contenido);
-
-
-
 }
 function compruebaDatos_inicioSesion() {
     var usuario = document.getElementById("email").value;
@@ -334,4 +421,32 @@ function borrarHijos(nodo) {
             nodo.removeChild(nodo.firstChild);
         }
     }
+}
+function pasar_a_numero(diaString) {
+    var diaNum = 0;
+    switch (diaString) {
+        case 'Lunes':
+            diaNum = 1;
+            break;
+        case 'Martes':
+            diaNum = 2;
+            break;
+        case 'Miercoles':
+            diaNum = 3;
+            break;
+        case 'Jueves':
+            diaNum = 4;
+            break;
+        case 'Viernes':
+            diaNum = 5;
+            break;
+        case 'Sabado':
+            diaNum = 6;
+            break;
+        case 'Domingo':
+            diaNum = 0;
+            break;
+        default:
+    }
+    return diaNum;
 }

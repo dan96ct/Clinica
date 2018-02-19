@@ -33,27 +33,31 @@ function cargarDiasMedico(medico) {
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            var datos = objetoAjax.responseText;
-            var objeto = JSON.parse(datos);
-            mostrarDiasCalendario(pasar_a_numero(objeto[0].dia));
+            mostrarDiasCalendario(pasar_a_numero);
         }
     }
 }
-function mostrarDiasCalendario(num) {
+function mostrarDiasCalendario() {
+    var datos = objetoAjax.responseText;
+    var objeto = JSON.parse(datos);
     $('#calendar').fullCalendar('destroy');
     $('#calendar').fullCalendar({
         defaultDate: '2018-01-12',
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         dayClick: function (date, jsEvent, view) {
-            if (date.day() == num) {
                 añadirDia(date);
-                $(this).css('background-color', 'red');
-            }
+                for (var i = 0; i < objeto.length; i++) {
+                    if (date.day() == pasar_a_numero(objeto[i].dia)) {
+                        $(this).css('background-color', 'red');
+                    }
+                }
         }, dayRender: function (date, cell) {
             cell.css("background-color", "white");
-            if (date.day() == num) {
-                cell.css("background-color", "green");
+            for (var i = 0; i < objeto.length; i++) {
+                if (date.day() == pasar_a_numero(objeto[i].dia)) {
+                    cell.css("background-color", "green");
+                }
             }
         }
     });

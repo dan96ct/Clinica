@@ -1,11 +1,13 @@
 
 #contenido{width: 80%;
+           min-height: 500px;
            margin: 0px auto;
            margin-top: 4%;
            -webkit-box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75);
            -moz-box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75);
            box-shadow: 10px 10px 46px 0px rgba(0,0,0,0.75); padding:2em;
-           background-color: #f5f5f5;}
+           background-color: #f5f5f5;
+           margin-bottom: 20px;}
 .datosEmpresa{
     font-size: 19px;
     height: 50%;
@@ -32,9 +34,19 @@
 #calendar{
     margin-top: 30px !important;
 }
+#calendar_1{
+    width: 480px !important;
+    display: inline-block;
+}
+.informacion_turnos{
+    display: inline-block;
+    text-align: center;
+}
 .icon_contacto{
     width: 50px;
     height: 50px;
 }
-
+.informacion_turnos{
+    margin-left: 100px;   
+}
 

@@ -1,8 +1,10 @@
--- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
+CREATE DATABASE  IF NOT EXISTS `bd_clinica` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci */;
+USE `bd_clinica`;
+-- MySQL dump 10.13  Distrib 5.7.20, for macos10.12 (x86_64)
 --
 -- Host: 127.0.0.1    Database: bd_clinica
 -- ------------------------------------------------------
--- Server version	10.1.28-MariaDB
+-- Server version	5.7.20
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -168,9 +170,10 @@ CREATE TABLE `diaslibres` (
   `idMedico` int(11) NOT NULL,
   `fechaLibre` date NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `fechaLibre_UNIQUE` (`fechaLibre`,`idMedico`),
   KEY `id_medico_dialibre_idx` (`idMedico`),
   CONSTRAINT `id_medico_dialibre` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +196,7 @@ CREATE TABLE `especialidades` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,7 +254,7 @@ CREATE TABLE `horariosmedicos` (
   KEY `idTurno_horarios_idx` (`idTurno`),
   CONSTRAINT `idMedico_horarios` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idTurno_horarios` FOREIGN KEY (`idTurno`) REFERENCES `turnos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,7 +263,7 @@ CREATE TABLE `horariosmedicos` (
 
 LOCK TABLES `horariosmedicos` WRITE;
 /*!40000 ALTER TABLE `horariosmedicos` DISABLE KEYS */;
-INSERT INTO `horariosmedicos` VALUES (4,5,2),(5,5,3),(6,5,4),(7,6,10),(8,6,11),(9,6,15),(10,7,12),(11,7,13),(12,7,14);
+INSERT INTO `horariosmedicos` VALUES (4,5,2),(5,5,3),(6,5,4),(7,6,10),(8,6,11),(9,6,15),(10,7,12),(11,7,13),(12,7,14),(13,5,17),(14,5,20),(15,5,18);
 /*!40000 ALTER TABLE `horariosmedicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +284,7 @@ CREATE TABLE `medicos` (
   PRIMARY KEY (`id`),
   KEY `id_especialidad_idx` (`especialidad`),
   CONSTRAINT `id_especialidad` FOREIGN KEY (`especialidad`) REFERENCES `especialidades` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -392,4 +395,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-05 23:09:29
+-- Dump completed on 2018-02-19 10:14:41
