@@ -166,8 +166,11 @@ function cargarDiasLibres(medico) {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             var datos = objetoAjax.responseText;
             var objeto = JSON.parse(datos);
-            arrayDiasLibres = objeto;
-            alert(arrayDiasLibres[0].diasLibres);
+            if (objeto !== null) {
+                arrayDiasLibres = objeto;
+            }else{
+                arrayDiasLibres = {'diasLibres':'0'};
+            }
             $('#calendar_1').fullCalendar('destroy');
             $('#calendar_1').fullCalendar({
                 defaultDate: '2018-01-12',
@@ -190,7 +193,7 @@ function cargarDiasLibres(medico) {
                                 $(this).css('background-color', '#00FFBD');
                                 diaSeleccionado_objeto = $(this);
                                 diaSeleccionado_string = date.format('YYYY-MM-DD');
-                                //cargarHorarioDia(medico);
+                                cargarHorarioDia(medico);
                             }
                         }
                     }
@@ -219,7 +222,7 @@ function cargarHorarioDia(medico) {
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            mostrarDatosMedicos();
+            
         }
     }
 }
