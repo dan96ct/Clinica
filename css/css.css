@@ -1,6 +1,6 @@
 
 #contenido{width: 80%;
-           min-height: 600px;
+           min-height: 700px;
            max-width: 1200px;
            margin: 0px auto;
            margin-top: 4%;
@@ -39,16 +39,20 @@
     width: 480px !important;
     float:left;
 }
-.informacion_turnos{
+.divDerecho{
     float:left;
     text-align: center;
+    margin-left: 100px; 
+    font-size: 20px;
+
+}
+.divIzquierdo{
+    float:left;
+    width: 50%;
 }
 .icon_contacto{
     width: 50px;
     height: 50px;
-}
-.informacion_turnos{
-    margin-left: 100px;   
 }
 #lista_horas{
     font-size: 23px;

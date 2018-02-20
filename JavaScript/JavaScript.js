@@ -3,6 +3,7 @@ var arrayDiasLaborables;
 var arrayDiasLibres;
 var diaSeleccionado_objeto = "";
 var diaSeleccionado_string = "";
+var resumenDatos = {'medico': '', 'especialidad': '', 'dia': '', 'hora': ''};
 /* FUNCIONES DE INICIO */
 
 function cargarTitulo() {
@@ -118,6 +119,9 @@ function mostrarInterfazConsulta() {
 
 function interfazElegirCita() {
     var medico = document.getElementById("lista_medicos").value;
+    resumenDatos.medico = medico;
+    resumenDatos.especialidad = document.getElementById("lista_especialidades").value;
+
     var contenido = document.getElementById("contenido");
     borrarHijos(contenido);
 
@@ -134,17 +138,59 @@ function interfazElegirCita() {
     contenido.appendChild(div);
 
     var div2 = document.createElement("div");
-    div2.setAttribute("class", "informacion_turnos");
+    div2.setAttribute("class", "divDerecho");
     contenido.appendChild(div2);
     var h2 = $("<h2>Cita para: " + medico + "</h2>");
-    $('.informacion_turnos').append(h2);
+    $('.divDerecho').append(h2);
     var select = $('<select id="lista_horas"></select>');
-    $('.informacion_turnos').append('<h3>Seleccione un horario</h3>');
-    $('.informacion_turnos').append(select);
-    $('.informacion_turnos').append('<br><button style="margin-top:20px;" type="button" class="btn btn-primary">Confirmar</button>');
+    $('.divDerecho').append('<h3>Seleccione un horario</h3>');
+    $('.divDerecho').append(select);
+    $('.divDerecho').append('<br><button onclick="cargarInterfazFormulario();" style="margin-top:20px;" type="button" class="btn btn-primary">Confirmar</button>');
 
     cargar_diasLaborables(medico);
 
+}
+function cargarInterfazFormulario() {
+    if (document.getElementById("lista_horas") !== null) {
+        resumenDatos.hora = document.getElementById("lista_horas").value;
+        resumenDatos.dia = diaSeleccionado_string;
+    }
+    var contenido = document.getElementById("contenido");
+    borrarHijos(contenido);
+
+    $('#contenido').append('<h2 id="texto_centrado">Confirmacion de datos</h2>');
+
+    var hr = document.createElement("hr");
+    contenido.appendChild(hr);
+
+    $('#contenido').append('<div class="divIzquierdo"></div>');
+    $('.divIzquierdo').append('<button onclick="cargarFormularioRegistro();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg btn-block">Registrar</button><br>\n\
+                               <button onclick="cargarFormularioLogin();" style="margin-top:20px;" type="button" class="btn btn-secondary btn-lg btn-block">Login</button>');
+    $('#contenido').append('<div class="divDerecho"></div>');
+    $('.divDerecho').append('<h3>Resumen de datos</h3>');
+    $('.divDerecho').append('<strong>Especialidad:</strong>' + resumenDatos.especialidad + '<br>');
+    $('.divDerecho').append('<strong>Medico:</strong>' + resumenDatos.medico + '<br>');
+    $('.divDerecho').append('<strong>Dia:</strong>' + resumenDatos.dia + '<br>');
+    $('.divDerecho').append('<strong>Hora:</strong>' + resumenDatos.hora);
+}
+function cargarFormularioRegistro() {
+    $('.divIzquierdo').empty();
+    $('.divIzquierdo').append('<button onclick="cargarInterfazFormulario()" style="margin-top:20px;" type="button" class="btn btn-primary">Volver</button>');
+    $('.divIzquierdo').append('<h2>Registro</h2>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="NIF">Introduce tu NIF</label><input type="text" class="form-control" id="NIF"  placeholder="NIF"></div>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="Nombre">Introduce tu Nombre</label><input type="text" class="form-control" id="Nombre"  placeholder="Nombre"></div>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="Apellido">Introduce tu Apellido</label><input type="text" class="form-control" id="Apellido"  placeholder="Apellido"></div>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="Email">Introduce tu Email</label><input type="Email" class="form-control" id="Email"  placeholder="Email"></div>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="psw">Introduce una contraseña</label><input type="password" class="form-control" id="pass"  placeholder="Contraseña"></div>');
+    $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
+}
+function cargarFormularioLogin() {
+    $('.divIzquierdo').empty();
+    $('.divIzquierdo').append('<button onclick="cargarInterfazFormulario()" style="margin-top:20px;" type="button" class="btn btn-primary">Volver</button>');
+    $('.divIzquierdo').append('<h2>Login</h2>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="Email">Introduce tu Email</label><input type="Email" class="form-control" id="Email"  placeholder="Email"></div>');
+    $('.divIzquierdo').append('<div class="form-group"><label for="psw">Introduce una contraseña</label><input type="password" class="form-control" id="pass"  placeholder="Contraseña"></div>');
+    $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
 }
 
 function cargar_diasLaborables(medico) {
