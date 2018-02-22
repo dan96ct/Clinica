@@ -1,8 +1,14 @@
 <?php
+
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+$jsonResumen = $_REQUEST['json'];
+$jsonResumenConsulta = $_REQUEST['json2'];
+$cliente = json_decode($jsonResumen);
+$datosConsulta = json_decode($jsonResumenConsulta);
 
 require_once '../phpmailer/src/PHPMailer.php';
 require_once '../phpmailer/src/Exception.php';
@@ -25,15 +31,23 @@ try {
     $mail->smtpConnect();
 
     //Recipients
-    $mail->setFrom('d.cebrian9@gmail.com', 'Mailer');
-    $mail->addAddress('d.cebrian9@gmail.com', 'Joe User');     // Add a recipient
-
-
-
+    $mail->setFrom($cliente->email, '');
+    $mail->addAddress($cliente->email, 'Clinica');     // Add a recipient
     //Content
     $mail->isHTML(true);                                  // Set email format to HTML
-    $mail->Subject = 'Here is the subject';
-    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+    $mail->Subject = 'DATOS CLINICA ';
+    $mail->Body = '<table style="font-size:20px;">'
+            . '<tr><td colspan="2">DATOS DE USUARIO</td></tr>'
+            . '<tr><td>Nombre</td><td>' . $cliente->nombre . '</td></tr>'
+            . '<tr><td>NIF</td><td>' . $cliente->nif . '</td></tr>'
+            . '<tr><td>Apellidos</td><td>' . $cliente->apellido . '</td></tr>'
+            . '<tr><td>Email</td><td>' . $cliente->email . '</td></tr>'
+            . '<tr><td colspan="2">DATOS DE LA CITA</td></tr>'
+            . '<tr><td>Medico</td><td>' . $datosConsulta->medico . '</td></tr>'
+            . '<tr><td>Especialidad</td><td>' . $datosConsulta->especialidad . '</td></tr>'
+            . '<tr><td>Dia</td><td>' . $datosConsulta->dia . '</td></tr>'
+            . '<tr><td>Hora</td><td>' . $datosConsulta->hora . '</td></tr>'
+            . '</table>';
     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
     $mail->send();

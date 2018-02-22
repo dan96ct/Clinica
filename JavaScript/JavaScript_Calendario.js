@@ -41,12 +41,12 @@ function mostrarDiasCalendario() {
     var datos = objetoAjax.responseText;
     var objeto = JSON.parse(datos);
     $('#calendar').fullCalendar('destroy');
+    var miDia = new Date();
     $('#calendar').fullCalendar({
-        defaultDate: '2018-01-12',
+        defaultDate: miDia,
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         dayClick: function (date, jsEvent, view) {
-            var miDia = new Date();
             if (date > miDia) {
                 añadirDia(date);
                 for (var i = 0; i < objeto.length; i++) {

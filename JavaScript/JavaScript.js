@@ -4,6 +4,7 @@ var arrayDiasLibres;
 var diaSeleccionado_objeto = "";
 var diaSeleccionado_string = "";
 var resumenDatos = {'medico': '', 'especialidad': '', 'dia': '', 'hora': ''};
+var cliente = {'nif': '', 'nombre': '', 'apellido': '', 'email': '', 'pass': ''};
 /* FUNCIONES DE INICIO */
 
 function cargarTitulo() {
@@ -20,7 +21,54 @@ function cargarTitulo() {
         }
     }
 }
+/*FUNCIONTES CANCELAR CITA*/
+function interfazElegirOpcionConsulta() {
+    borrarPadre();
+    //Lista especialidades
+    var contenido = document.createElement("div");
+    document.getElementById("padre").appendChild(contenido);
+    contenido.setAttribute("id", "contenido");
+    $('#contenido').append('<section id="botonesOpciones"></section>');
+    $('#botonesOpciones').append('<button onclick="mostrarInterfazConsulta();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg">Pedir cita</button>')
+    $('#botonesOpciones').append('<button onclick="cargarInterfazCancelarCita();" style="margin-top:20px;" type="button" class="btn btn-danger btn-lg">Cancelar cita</button>')
 
+}
+function cargarInterfazCancelarCita() {
+    $('#contenido').empty();
+    var contenido = document.getElementById("contenido");
+    var h2 = document.createElement("h2");
+    h2.setAttribute("id", "texto_centrado");
+    h2.innerHTML = "Cancelar cita";
+    contenido.appendChild(h2);
+
+    var hr = document.createElement("hr");
+    contenido.appendChild(hr);
+    $('#contenido').append('<h2 style="text-align:center;">Login</h2>');
+    $('#contenido').append('<div class="form-group" style="width:70%; margin:0 auto;"><label for="Email">Introduce tu Email</label><input type="Email" class="form-control" id="Email"  placeholder="Email"></div>');
+    $('#contenido').append('<div class="form-group" style="width:70%; margin:0 auto;"><label for="psw">Introduce una contraseña</label><input type="password" class="form-control" id="pass"  placeholder="Contraseña"></div>');
+    $('#contenido').append('<button onclick="comprobarLoginYmostrarCitas();" style="margin-top:20px; width:70%; margin:0 auto;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
+}
+function comprobarLoginYmostrarCitas() {
+    var email = document.getElementById("Email");
+    var pass = document.getElementById("pass");
+    var datosUsuario = {'email': email, 'pass': pass};
+    var json = JSON.stringify(datosUsuario);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetCitasLogin.php?json=" + json);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            if (datos != false) {
+                alert(datos);
+                var objeto = JSON.parse(datos);
+
+            } else {
+                alert("datos incorrectos o inexistentes");
+            }
+        }
+    }
+}
 /*FUNCIONES DE CONSULTA */
 
 function cargarMedicos_especialidad(especialidad) {
@@ -151,27 +199,35 @@ function interfazElegirCita() {
 
 }
 function cargarInterfazFormulario() {
+    var validar = true;
     if (document.getElementById("lista_horas") !== null) {
-        resumenDatos.hora = document.getElementById("lista_horas").value;
-        resumenDatos.dia = diaSeleccionado_string;
+        if (document.getElementById("lista_horas").value !== "") {
+            resumenDatos.hora = document.getElementById("lista_horas").value;
+            resumenDatos.dia = diaSeleccionado_string;
+        } else {
+            alert("Por favor seleccione un dia y una hora");
+            validar = false;
+        }
     }
-    var contenido = document.getElementById("contenido");
-    borrarHijos(contenido);
+    if (validar == true) {
+        var contenido = document.getElementById("contenido");
+        borrarHijos(contenido);
 
-    $('#contenido').append('<h2 id="texto_centrado">Confirmacion de datos</h2>');
+        $('#contenido').append('<h2 id="texto_centrado">Confirmacion de datos</h2>');
 
-    var hr = document.createElement("hr");
-    contenido.appendChild(hr);
+        var hr = document.createElement("hr");
+        contenido.appendChild(hr);
 
-    $('#contenido').append('<div class="divIzquierdo"></div>');
-    $('.divIzquierdo').append('<button onclick="cargarFormularioRegistro();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg btn-block">Registrar</button><br>\n\
+        $('#contenido').append('<div class="divIzquierdo"></div>');
+        $('.divIzquierdo').append('<button onclick="cargarFormularioRegistro();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg btn-block">Registrar</button><br>\n\
                                <button onclick="cargarFormularioLogin();" style="margin-top:20px;" type="button" class="btn btn-secondary btn-lg btn-block">Login</button>');
-    $('#contenido').append('<div class="divDerecho"></div>');
-    $('.divDerecho').append('<h3>Resumen de datos</h3>');
-    $('.divDerecho').append('<strong>Especialidad:</strong>' + resumenDatos.especialidad + '<br>');
-    $('.divDerecho').append('<strong>Medico:</strong>' + resumenDatos.medico + '<br>');
-    $('.divDerecho').append('<strong>Dia:</strong>' + resumenDatos.dia + '<br>');
-    $('.divDerecho').append('<strong>Hora:</strong>' + resumenDatos.hora);
+        $('#contenido').append('<div class="divDerecho"></div>');
+        $('.divDerecho').append('<h3>Resumen de datos</h3>');
+        $('.divDerecho').append('<strong>Especialidad:</strong>' + resumenDatos.especialidad + '<br>');
+        $('.divDerecho').append('<strong>Medico:</strong>' + resumenDatos.medico + '<br>');
+        $('.divDerecho').append('<strong>Dia:</strong>' + resumenDatos.dia + '<br>');
+        $('.divDerecho').append('<strong>Hora:</strong>' + resumenDatos.hora);
+    }
 }
 function cargarFormularioRegistro() {
     $('.divIzquierdo').empty();
@@ -182,7 +238,7 @@ function cargarFormularioRegistro() {
     $('.divIzquierdo').append('<div class="form-group"><label for="Apellido">Introduce tu Apellido</label><input type="text" class="form-control" id="Apellido"  placeholder="Apellido"></div>');
     $('.divIzquierdo').append('<div class="form-group"><label for="Email">Introduce tu Email</label><input type="Email" class="form-control" id="Email"  placeholder="Email"></div>');
     $('.divIzquierdo').append('<div class="form-group"><label for="psw">Introduce una contraseña</label><input type="password" class="form-control" id="pass"  placeholder="Contraseña"></div>');
-    $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
+    $('.divIzquierdo').append('<button onclick="guardarDatosRegistro();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
 }
 function cargarFormularioLogin() {
     $('.divIzquierdo').empty();
@@ -190,9 +246,115 @@ function cargarFormularioLogin() {
     $('.divIzquierdo').append('<h2>Login</h2>');
     $('.divIzquierdo').append('<div class="form-group"><label for="Email">Introduce tu Email</label><input type="Email" class="form-control" id="Email"  placeholder="Email"></div>');
     $('.divIzquierdo').append('<div class="form-group"><label for="psw">Introduce una contraseña</label><input type="password" class="form-control" id="pass"  placeholder="Contraseña"></div>');
-    $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
+    $('.divIzquierdo').append('<button onclick="comprobarLogin();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
 }
+function comprobarLogin() {
+    var email = document.getElementById('Email').value;
+    var pass = document.getElementById('pass').value;
+    var objeto = {'email': email, 'pass': pass};
+    var respJSON = JSON.stringify(objeto);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/ComprobarLogin.php?json=" + respJSON);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            if (datos != false) {
+                var objeto = JSON.parse(datos);
+                alert(objeto.nombre);
+                cliente.nombre = objeto.nombre;
+                cliente.nif = objeto.nif;
+                cliente.apellido = objeto.apellido;
+                cliente.email = objeto.email;
 
+                $('.divIzquierdo').empty();
+                $('.divIzquierdo').attr("style")
+                $('.divIzquierdo').append('<h2>Datos de cliente</h2>');
+                $('.divIzquierdo').append('<strong>nif:</strong>' + cliente.nif + '<br>');
+                $('.divIzquierdo').append('<strong>nombre:</strong>' + cliente.nombre + '<br>');
+                $('.divIzquierdo').append('<strong>apellido:</strong>' + cliente.apellido + '<br>');
+                $('.divIzquierdo').append('<strong>Email:</strong>' + cliente.email);
+                $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar datos</button>');
+
+            } else {
+                alert("datos incorrectos o inexistentes, registrate si no lo has hecho");
+                cargarInterfazFormulario();
+            }
+        }
+    }
+}
+function guardarDatosRegistro() {
+    var nif = document.getElementById('NIF').value;
+    var nombre = document.getElementById('Nombre').value;
+    var apellido = document.getElementById('Apellido').value;
+    var email = document.getElementById('Email').value;
+    var pass = document.getElementById('pass').value;
+    if (nif == "" || nombre == "" || apellido == "" || email == "" || pass == "") {
+    } else {
+        cliente.nif = nif;
+        cliente.nombre = nombre;
+        cliente.apellido = apellido;
+        cliente.email = email;
+        cliente.pass = pass;
+        $('.divIzquierdo').empty();
+        $('.divIzquierdo').attr("style")
+        $('.divIzquierdo').append('<h2>Datos de cliente</h2>');
+        $('.divIzquierdo').append('<strong>nif:</strong>' + cliente.nif + '<br>');
+        $('.divIzquierdo').append('<strong>nombre:</strong>' + cliente.nombre + '<br>');
+        $('.divIzquierdo').append('<strong>apellido:</strong>' + cliente.apellido + '<br>');
+        $('.divIzquierdo').append('<strong>Email:</strong>' + cliente.email);
+        $('.divIzquierdo').append('<button onclick="guardarDatosRegistroBD();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar datos</button>');
+    }
+}
+function guardarDatosRegistroBD() {
+    var respJSON = JSON.stringify(cliente);
+    var respJSON2 = JSON.stringify(resumenDatos);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GuardarDatosRegistro.php?json=" + respJSON + "&json2=" + respJSON2);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            if (objetoAjax.responseText == false) {
+                alert("Ya te has registrado, por favor ve a login");
+                cargarInterfazFormulario();
+            } else {
+                enviarEmail();
+                $('#padre').empty();
+                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+            }
+        }
+    }
+}
+function guarDatosCitaSolo() {
+    var respJSON = JSON.stringify(cliente);
+    var respJSON2 = JSON.stringify(resumenDatos);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GuardarDatosRegistro.php?json=" + respJSON + "&json2=" + respJSON2);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            if (objetoAjax.responseText == false) {
+                alert("Ya te has registrado, por favor ve a login");
+                cargarInterfazFormulario();
+            } else {
+                enviarEmail();
+                $('#padre').empty();
+                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+            }
+        }
+    }
+}
+function enviarEmail() {
+    var respJSON = JSON.stringify(cliente);
+    var respJSON2 = JSON.stringify(resumenDatos);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/Enviar_email.php?json=" + respJSON + "&json2=" + respJSON2);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+        }
+    }
+}
 function cargar_diasLaborables(medico) {
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
@@ -221,12 +383,12 @@ function cargarDiasLibres(medico) {
                 arrayDiasLibres = {'diasLibres': '0'};
             }
             $('#calendar_1').fullCalendar('destroy');
+            var miDia = new Date();
             $('#calendar_1').fullCalendar({
-                defaultDate: '2018-01-12',
+                defaultDate: miDia,
                 editable: true,
                 eventLimit: true, // allow "more" link when too many events
                 dayClick: function (date, jsEvent, view) {
-                    var miDia = new Date();
                     if (date > miDia) {
                         for (var i = 0; i < arrayDiasLaborables.length; i++) {
                             if (date.day() == pasar_a_numero(arrayDiasLaborables[i].dia)) {
@@ -286,7 +448,7 @@ function mostrarHorarioDia() {
     var objeto = JSON.parse(datos);
     $('#lista_horas').empty();
     for (var i = 0; i < objeto.length; i++) {
-        $('#lista_horas').append('<option>' + objeto[i].tramoInicio + ' - ' + objeto[i].tramoFinal + '</option>')
+        $('#lista_horas').append('<option>' + objeto[i].tramoInicio + '</option>')
     }
 }
 function cargar_datosMedico(medico) {
@@ -451,7 +613,7 @@ function compruebaDatos_inicioSesion() {
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             if (objetoAjax.responseText !== "null") {
-                location.href = "calendario.php?medico";
+                location.href = "calendario.html";
             }
         }
     }
