@@ -14,7 +14,7 @@ if ($consulta) {
     }
 }
 if ($arrayResultado != null){
-    echo json_decode($arrayResultado);
+    echo json_encode($arrayResultado);
 }else{
     echo false;
 }

@@ -49,22 +49,61 @@ function cargarInterfazCancelarCita() {
     $('#contenido').append('<button onclick="comprobarLoginYmostrarCitas();" style="margin-top:20px; width:70%; margin:0 auto;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
 }
 function comprobarLoginYmostrarCitas() {
-    var email = document.getElementById("Email");
-    var pass = document.getElementById("pass");
-    var datosUsuario = {'email': email, 'pass': pass};
-    var json = JSON.stringify(datosUsuario);
-    objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetCitasLogin.php?json=" + json);
-    objetoAjax.send();
-    objetoAjax.onreadystatechange = function () {
-        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            var datos = objetoAjax.responseText;
-            if (datos != false) {
-                alert(datos);
-                var objeto = JSON.parse(datos);
+    var email = document.getElementById("Email").value;
+    var pass = document.getElementById("pass").value;
+    if (email != "" || pass != "") {
+        var datosUsuario = {'email': email, 'pass': pass};
+        var json = JSON.stringify(datosUsuario);
+        objetoAjax = AJAXCrearObjeto(); //crea el objeto
+        objetoAjax.open('GET', "php/GetCitasLogin.php?json=" + json);
+        objetoAjax.send();
+        objetoAjax.onreadystatechange = function () {
+            if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+                var datos = objetoAjax.responseText;
+                if (datos != false) {
+                    var objeto = JSON.parse(datos);
+                    mostrarCitasCliente(objeto);
+                } else {
+                    alert("datos incorrectos o inexistentes");
+                }
+            }
+        }
+    }
+}
+function mostrarCitasCliente(objeto) {
+    $('#contenido').empty();
+    var contenido = document.getElementById("contenido");
+    var h2 = document.createElement("h2");
+    h2.setAttribute("id", "texto_centrado");
+    h2.innerHTML = "Cancelar cita";
+    contenido.appendChild(h2);
 
-            } else {
-                alert("datos incorrectos o inexistentes");
+    var hr = document.createElement("hr");
+    contenido.appendChild(hr);
+    $('#contenido').append('<h3 style="text-align:center;">Seleccione la cita que desea cancelar</h3>');
+    $('#contenido').append('<select style="text-align:center; width:70%; margin:0 auto; margin-bottom:20px;" class="form-control" id="lista_diasCliente"></select>');
+    for (var i = 0; i < objeto.length; i++) {
+        $('#lista_diasCliente').append('<option name="' + objeto[i].id + '">' + objeto[i].nombreMedico + " " + objeto[i].fecha + " " + objeto[i].hora + "</option>");
+    }
+    $('#contenido').append('<button onclick="borrarCita();" style="margin-top:20px; width:70%; margin:0 auto;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
+}
+function borrarCita() {
+    var opciones = document.getElementsByTagName("option");
+    var fechaElegida = document.getElementById("lista_diasCliente").value;
+    for (var i = 0; i < opciones.length; i++) {
+        if (opciones[i].innerHTML == fechaElegida) {
+            var id = opciones[i].getAttribute("name");
+            var objeto = {'id': id};
+            var json = JSON.stringify(objeto);
+            objetoAjax = AJAXCrearObjeto(); //crea el objeto
+            objetoAjax.open('GET', "php/BorrarCita.php?json=" + json);
+            objetoAjax.send();
+            objetoAjax.onreadystatechange = function () {
+                if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+                    var datos = objetoAjax.responseText;
+                    $('#padre').empty();
+                    $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>Su cita a sido eliminada satisfactoriamente</div>');
+                }
             }
         }
     }
@@ -274,7 +313,7 @@ function comprobarLogin() {
                 $('.divIzquierdo').append('<strong>nombre:</strong>' + cliente.nombre + '<br>');
                 $('.divIzquierdo').append('<strong>apellido:</strong>' + cliente.apellido + '<br>');
                 $('.divIzquierdo').append('<strong>Email:</strong>' + cliente.email);
-                $('.divIzquierdo').append('<button onclick="" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar datos</button>');
+                $('.divIzquierdo').append('<button onclick="guarDatosCitaSolo();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar datos</button>');
 
             } else {
                 alert("datos incorrectos o inexistentes, registrate si no lo has hecho");
@@ -329,12 +368,12 @@ function guarDatosCitaSolo() {
     var respJSON = JSON.stringify(cliente);
     var respJSON2 = JSON.stringify(resumenDatos);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GuardarDatosRegistro.php?json=" + respJSON + "&json2=" + respJSON2);
+    objetoAjax.open('GET', "php/GuardarCita.php?json=" + respJSON + "&json2=" + respJSON2);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             if (objetoAjax.responseText == false) {
-                alert("Ya te has registrado, por favor ve a login");
+                alert("Ha surgido un problema");
                 cargarInterfazFormulario();
             } else {
                 enviarEmail();
