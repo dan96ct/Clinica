@@ -2,10 +2,11 @@
 
 include_once 'conexion_bd.php';
 
-$especialidad = $_REQUEST['especialidad'];
+$especialidad = $_REQUEST['json'];
+$objetoEsp = json_decode($especialidad);
 
 
-$ordenSQL = "SELECT medicos.nombre'nombreMedicos' FROM medicos,especialidades WHERE  medicos.especialidad = especialidades.id AND especialidades.nombre =".$especialidad;
+$ordenSQL = "SELECT medicos.nombre'nombreMedicos' FROM medicos,especialidades WHERE  medicos.especialidad = especialidades.id AND especialidades.nombre ='".$objetoEsp->especialidad. "';";
 $consulta = $conexion->query($ordenSQL);
 $arrayResultado = Array();
 if ($consulta) {

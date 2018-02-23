@@ -111,8 +111,10 @@ function borrarCita() {
 /*FUNCIONES DE CONSULTA */
 
 function cargarMedicos_especialidad(especialidad) {
+    var especialidad = {'especialidad':especialidad};
+    var json = JSON.stringify(especialidad);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetMedicosEspecialidad.php?especialidad='" + especialidad + "'");
+    objetoAjax.open('GET', "php/GetMedicosEspecialidad.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -395,8 +397,10 @@ function enviarEmail() {
     }
 }
 function cargar_diasLaborables(medico) {
+    var objeto = {'medico': medico};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -409,8 +413,10 @@ function cargar_diasLaborables(medico) {
     }
 }
 function cargarDiasLibres(medico) {
+    var objeto = {'medico': medico};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetDiasLibres.php?medico=" + medico);
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -445,7 +451,7 @@ function cargarDiasLibres(medico) {
                                     $(this).css('background-color', '#00FFBD');
                                     diaSeleccionado_objeto = $(this);
                                     diaSeleccionado_string = date.format('YYYY-MM-DD');
-                                    cargarHorarioDia(medico);
+                                    cargarHorarioDia(medico, diaSeleccionado_string);
                                 }
                             }
                         }
@@ -472,9 +478,11 @@ function cargarDiasLibres(medico) {
     }
 
 }
-function cargarHorarioDia(medico) {
+function cargarHorarioDia(medico, dia) {
+    var objeto = {'medico': medico, 'dia': dia};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetHorarioDia.php?medico=" + medico + "&dia='" + diaSeleccionado_string + "'");
+    objetoAjax.open('GET', "php/GetHorarioDia.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -491,8 +499,10 @@ function mostrarHorarioDia() {
     }
 }
 function cargar_datosMedico(medico) {
+    var objeto = {'medico': medico};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -646,12 +656,14 @@ function mostrarInterfazPanelControl() {
 function compruebaDatos_inicioSesion() {
     var usuario = document.getElementById("email").value;
     var pass = document.getElementById("pwd").value;
+    var objeto = {'usuario': usuario, 'pass': pass};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/CompruebaDatosUsuario.php?usuario='" + usuario + "'&pass='" + pass + "'");
+    objetoAjax.open('GET', "php/CompruebaDatosUsuario.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            if (objetoAjax.responseText !== "null") {
+            if (objetoAjax.responseText != "null") {
                 location.href = "calendario.html";
             }
         }

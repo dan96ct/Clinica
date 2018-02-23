@@ -2,9 +2,9 @@
 
 include_once 'conexion_bd.php';
 
-$medico = $_REQUEST['medico'];
-
-$ordenSQL = "SELECT * FROM medicos,horariosmedicos, turnos WHERE medicos.id = horariosmedicos.idMedico AND turnos.id = horariosmedicos.idTurno AND medicos.nombre =".$medico;
+$medico = $_REQUEST['json'];
+$objetoMedico = json_decode($medico);
+$ordenSQL = "SELECT * FROM medicos,horariosmedicos, turnos WHERE medicos.id = horariosmedicos.idMedico AND turnos.id = horariosmedicos.idTurno AND medicos.nombre ='".$objetoMedico->medico."';";
 $consulta = $conexion->query($ordenSQL);
 $arrayResultado = Array();
 if ($consulta) {
