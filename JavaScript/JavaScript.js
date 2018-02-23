@@ -17,7 +17,6 @@ function cargarTitulo() {
             var objeto = JSON.parse(datos);
             var h1 = document.getElementById("Titulo");
             h1.innerHTML = "Bienvenido a Clinica " + objeto.nombre;
-
         }
     }
 }
@@ -40,7 +39,6 @@ function cargarInterfazCancelarCita() {
     h2.setAttribute("id", "texto_centrado");
     h2.innerHTML = "Cancelar cita";
     contenido.appendChild(h2);
-
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
     $('#contenido').append('<h2 style="text-align:center;">Login</h2>');
@@ -77,7 +75,6 @@ function mostrarCitasCliente(objeto) {
     h2.setAttribute("id", "texto_centrado");
     h2.innerHTML = "Cancelar cita";
     contenido.appendChild(h2);
-
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
     $('#contenido').append('<h3 style="text-align:center;">Seleccione la cita que desea cancelar</h3>');
@@ -111,7 +108,7 @@ function borrarCita() {
 /*FUNCIONES DE CONSULTA */
 
 function cargarMedicos_especialidad(especialidad) {
-    var especialidad = {'especialidad':especialidad};
+    var especialidad = {'especialidad': especialidad};
     var json = JSON.stringify(especialidad);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', "php/GetMedicosEspecialidad.php?json=" + json);
@@ -133,99 +130,77 @@ function mostrarMedicos() {
         list.appendChild(option);
     }
     cargar_datosMedico(objeto[0].nombre);
-
-
 }
 function mostrarInterfazConsulta() {
     borrarPadre();
     //Lista especialidades
     var contenido = document.createElement("div");
     contenido.setAttribute("id", "contenido");
-
     var divInputs = document.createElement("div");
     divInputs.setAttribute("class", "divInputs");
-
     var h2 = document.createElement("h2");
     h2.setAttribute("id", "texto_centrado");
     h2.innerHTML = "Complete el formulario";
     contenido.appendChild(h2);
-
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
-
     contenido.appendChild(divInputs);
-
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
     divInputs.appendChild(div);
-
     var label = document.createElement("label");
     label.setAttribute("for", "sel1");
     label.innerHTML = "Seleccione una especialidad:";
     div.appendChild(label);
-
     var select = document.createElement("select");
     select.setAttribute("class", "form-control");
     select.setAttribute("name", "lista_especialidades");
     select.setAttribute("id", "lista_especialidades");
     select.setAttribute("onChange", "cargarMedicos_especialidad(this.value)");
     div.appendChild(select);
-
     //Lista medicos
     var div = document.createElement("div");
     div.setAttribute("class", "form-group");
     divInputs.appendChild(div);
-
     var label = document.createElement("label");
     label.setAttribute("for", "sel1");
     label.innerHTML = "Seleccione un medico:";
     div.appendChild(label);
-
     var select = document.createElement("select");
     select.setAttribute("class", "form-control");
     select.setAttribute("name", "lista_especialidades");
     select.setAttribute("id", "lista_medicos");
     select.setAttribute("onChange", "cargar_datosMedico(this.value)");
     div.appendChild(select);
-
     var boton = document.createElement("button");
     boton.setAttribute("class", "btn btn-primary");
     boton.setAttribute("style", "margin:20px;");
     boton.setAttribute("onclick", "interfazElegirCita();");
     boton.innerHTML = "Aceptar";
     div.appendChild(boton);
-
     document.getElementById("padre").appendChild(contenido);
-
     var divInputs = document.createElement("div");
     divInputs.setAttribute("class", "divInputs2");
     divInputs.setAttribute("id", "divMedico_datos");
     contenido.appendChild(divInputs);
-
     cargarEspecialidades();
-
 }
 
 function interfazElegirCita() {
     var medico = document.getElementById("lista_medicos").value;
     resumenDatos.medico = medico;
     resumenDatos.especialidad = document.getElementById("lista_especialidades").value;
-
     var contenido = document.getElementById("contenido");
     borrarHijos(contenido);
-
     var h2 = document.createElement("h2");
     h2.setAttribute("id", "texto_centrado");
     h2.innerHTML = "Seleccione el dia";
     contenido.appendChild(h2);
-
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
-
     var div = document.createElement("div");
     div.setAttribute("id", "calendar_1");
     contenido.appendChild(div);
-
     var div2 = document.createElement("div");
     div2.setAttribute("class", "divDerecho");
     contenido.appendChild(div2);
@@ -235,9 +210,7 @@ function interfazElegirCita() {
     $('.divDerecho').append('<h3>Seleccione un horario</h3>');
     $('.divDerecho').append(select);
     $('.divDerecho').append('<br><button onclick="cargarInterfazFormulario();" style="margin-top:20px;" type="button" class="btn btn-primary">Confirmar</button>');
-
     cargar_diasLaborables(medico);
-
 }
 function cargarInterfazFormulario() {
     var validar = true;
@@ -253,12 +226,9 @@ function cargarInterfazFormulario() {
     if (validar == true) {
         var contenido = document.getElementById("contenido");
         borrarHijos(contenido);
-
         $('#contenido').append('<h2 id="texto_centrado">Confirmacion de datos</h2>');
-
         var hr = document.createElement("hr");
         contenido.appendChild(hr);
-
         $('#contenido').append('<div class="divIzquierdo"></div>');
         $('.divIzquierdo').append('<button onclick="cargarFormularioRegistro();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg btn-block">Registrar</button><br>\n\
                                <button onclick="cargarFormularioLogin();" style="margin-top:20px;" type="button" class="btn btn-secondary btn-lg btn-block">Login</button>');
@@ -307,7 +277,6 @@ function comprobarLogin() {
                 cliente.nif = objeto.nif;
                 cliente.apellido = objeto.apellido;
                 cliente.email = objeto.email;
-
                 $('.divIzquierdo').empty();
                 $('.divIzquierdo').attr("style")
                 $('.divIzquierdo').append('<h2>Datos de cliente</h2>');
@@ -316,7 +285,6 @@ function comprobarLogin() {
                 $('.divIzquierdo').append('<strong>apellido:</strong>' + cliente.apellido + '<br>');
                 $('.divIzquierdo').append('<strong>Email:</strong>' + cliente.email);
                 $('.divIzquierdo').append('<button onclick="guarDatosCitaSolo();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Confirmar datos</button>');
-
             } else {
                 alert("datos incorrectos o inexistentes, registrate si no lo has hecho");
                 cargarInterfazFormulario();
@@ -408,7 +376,6 @@ function cargar_diasLaborables(medico) {
             var objeto = JSON.parse(datos);
             arrayDiasLaborables = objeto;
             cargarDiasLibres(medico);
-
         }
     }
 }
@@ -664,11 +631,69 @@ function compruebaDatos_inicioSesion() {
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
             if (objetoAjax.responseText != "null") {
-                location.href = "calendario.html";
+                mostrarOpcionesPanelControl();
             }
         }
     }
 
+}
+function mostrarOpcionesPanelControl() {
+    $('#contenido').empty();
+    $('#contenido').append('<button onclick="reenviarADiasLibres();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Dar dias libres a medicos</button>');
+    $('#contenido').append('<button onclick="mostrarCitasMedicos();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Ver citas de medicos</button>');
+}
+function mostrarCitasMedicos() {
+    $('#contenido').empty();
+    var contenido = document.getElementById("contenido");
+    var h2 = document.createElement("h2");
+    h2.setAttribute("id", "texto_centrado");
+    h2.innerHTML = "Seleccione un medico";
+    contenido.appendChild(h2);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetMedicos.php");
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            var objeto = JSON.parse(datos);
+            $('#contenido').append('<select class="form-control" id="medicos" onchange="cargarCitasMedicos(this.value); "></select>');
+            $('#medicos').empty();
+            for (var i = 0; i < objeto.length; i++) {
+                var option = document.createElement("option");
+                option.setAttribute("value", objeto[i].nombre);
+                option.innerHTML = objeto[i].nombre;
+                $('#medicos').append(option);
+            }
+            cargarCitasMedicos(objeto[0].nombre);
+        }
+    }
+}
+function cargarCitasMedicos(medico) {
+    var datosMedico = {'medico': medico};
+    var json = JSON.stringify(datosMedico);
+    objetoAjax = AJAXCrearObjeto(); //crea el objeto
+    objetoAjax.open('GET', "php/GetCitasMedicos.php?json=" + json);
+    objetoAjax.send();
+    objetoAjax.onreadystatechange = function () {
+        if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            var datos = objetoAjax.responseText;
+            if (datos != false) {
+                var objeto = JSON.parse(datos);
+                $('#tabla_citas').remove();
+                $('#contenido').append('<table id="tabla_citas"></tabla>');
+                
+                $('#tabla_citas').append('<tr><td>cliente</td><td>dia</td><td>hora</td><tr>');
+                for (var i = 0; i < objeto.length; i++) {
+                    $('#tabla_citas').append('<tr><td>'+objeto[i].nombreUsuario+'</td><td>'+objeto[i].fecha+'</td><td>'+objeto[i].hora+'</td><tr>');
+                }
+            } else {
+                alert("datos incorrectos o inexistentes");
+            }
+        }
+    }
+}
+function reenviarADiasLibres() {
+    location.href = "calendario.html";
 }
 /* FUNCIONES GENERICAS*/
 function AJAXCrearObjeto() {

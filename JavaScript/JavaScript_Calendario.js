@@ -28,8 +28,10 @@ function cargarMedicos() {
 }
 function cargarDiasMedico(medico) {
     arrayDias = []; //Reseteamos el array de dias para que no se mezclen con otro medico
+    var objeto = {'medico': medico};
+    var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetDatosMedicos.php?medico='" + medico + "'");
+    objetoAjax.open('GET', "php/GetDatosMedicos.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {

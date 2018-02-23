@@ -57,15 +57,20 @@ and open the template in the editor.
         </style>
     </head>
     <body onload="crearArrayDias()">
+        <main id="padre">
         <h2 id="titulo">Medico: <select id="medicos" onchange="cargarDiasMedico(this.value);">
             </select>
         </h2>
         <h3 id="titulo">Por favor seleccione los dias libres</h3>
-        <main class="calendario_main">
+        <section class="calendario_main">
             <a href="index.html"><button type="button" class="btn btn-primary">Volver</button></a>
             <button type="button" id="boton_confirmar" class="btn btn-success btn-lg" onclick="guardarDiasLibres();">Confirmar dias</button>
             <div id="calendar">     
             </div>
+            <div id="citas_medicos">
+                
+            </div>
+        </section>
         </main>
     </body>
 </html>
