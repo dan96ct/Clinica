@@ -18,15 +18,12 @@ and open the template in the editor.
     outline: 0;
 }
 
-#inicio{
-    background-image: url(../Imagenes/Wallpaper_inicio.jpg);
-     background-repeat:no-repeat;
-}
 #tituloInicio{
     margin:0 auto;
     width: 70%;
     text-align: center;
-    margin-top: 10%;
+    margin-top: 4%;
+    padding-top: 160px;
 }
 #nav > ul > li > a:before {
     display: inline-block;

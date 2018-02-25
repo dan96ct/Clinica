@@ -17,6 +17,7 @@ function cargarTitulo() {
             var objeto = JSON.parse(datos);
             var h1 = document.getElementById("Titulo");
             h1.innerHTML = "Bienvenido a Clinica " + objeto.nombre;
+            ocultarCanvas();
         }
     }
 }
@@ -24,17 +25,23 @@ function cargarTitulo() {
 function interfazElegirOpcionConsulta() {
     borrarPadre();
     //Lista especialidades
-    var contenido = document.createElement("div");
-    document.getElementById("padre").appendChild(contenido);
-    contenido.setAttribute("id", "contenido");
-    $('#contenido').append('<section id="botonesOpciones"></section>');
-    $('#botonesOpciones').append('<button onclick="mostrarInterfazConsulta();" style="margin-top:20px;" type="button" class="btn btn-primary btn-lg">Pedir cita</button>')
-    $('#botonesOpciones').append('<button onclick="cargarInterfazCancelarCita();" style="margin-top:20px;" type="button" class="btn btn-danger btn-lg">Cancelar cita</button>')
-
+    var div = document.createElement("div");
+    div.setAttribute("id", "pedirCita");
+    div.setAttribute("onclick", "mostrarInterfazConsulta();");
+    document.getElementById("padre").appendChild(div);
+    $('#pedirCita').append("<h2>Pedir cita</h2>");
+    var div = document.createElement("div");
+    div.setAttribute("id", "cancelarCita");
+    div.setAttribute("onclick", "cargarInterfazCancelarCita();");
+    document.getElementById("padre").appendChild(div);
+    $('#cancelarCita').append("<h2>Cancelar cita</h2>");
+    mostrarCanvas();
 }
 function cargarInterfazCancelarCita() {
-    $('#contenido').empty();
-    var contenido = document.getElementById("contenido");
+    $('#padre').empty();
+    var contenido = document.createElement("div");
+    contenido.setAttribute("id", "contenido");
+    document.getElementById("padre").appendChild(contenido);
     var h2 = document.createElement("h2");
     h2.setAttribute("id", "texto_centrado");
     h2.innerHTML = "Cancelar cita";
@@ -78,10 +85,12 @@ function mostrarCitasCliente(objeto) {
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
     $('#contenido').append('<h3 style="text-align:center;">Seleccione la cita que desea cancelar</h3>');
+    $('#contenido').append('<h2 style="text-align:center;">Tenga en cuenta que solo podrá dar de baja una cita si es con un dia de antelación.</h2>');
     $('#contenido').append('<select style="text-align:center; width:70%; margin:0 auto; margin-bottom:20px;" class="form-control" id="lista_diasCliente"></select>');
     for (var i = 0; i < objeto.length; i++) {
         $('#lista_diasCliente').append('<option name="' + objeto[i].id + '">' + objeto[i].nombreMedico + " " + objeto[i].fecha + " " + objeto[i].hora + "</option>");
     }
+
     $('#contenido').append('<button onclick="borrarCita();" style="margin-top:20px; width:70%; margin:0 auto;" type="button" class="btn btn-success btn-lg btn-block">Confirmar</button>');
 }
 function borrarCita() {
@@ -272,7 +281,6 @@ function comprobarLogin() {
             var datos = objetoAjax.responseText;
             if (datos != false) {
                 var objeto = JSON.parse(datos);
-                alert(objeto.nombre);
                 cliente.nombre = objeto.nombre;
                 cliente.nif = objeto.nif;
                 cliente.apellido = objeto.apellido;
@@ -306,7 +314,7 @@ function guardarDatosRegistro() {
         cliente.email = email;
         cliente.pass = pass;
         $('.divIzquierdo').empty();
-        $('.divIzquierdo').attr("style")
+        $('.divIzquierdo').attr("style");
         $('.divIzquierdo').append('<h2>Datos de cliente</h2>');
         $('.divIzquierdo').append('<strong>nif:</strong>' + cliente.nif + '<br>');
         $('.divIzquierdo').append('<strong>nombre:</strong>' + cliente.nombre + '<br>');
@@ -330,6 +338,7 @@ function guardarDatosRegistroBD() {
                 enviarEmail();
                 $('#padre').empty();
                 $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+                $('#padre').append('<div style="width:100%; text-align:center;"><button type="button" style="margin-top:50px;" class="btn btn-info" onclick="generarPDF();">Generar PDF con la informacion</button></div>');
             }
         }
     }
@@ -349,9 +358,24 @@ function guarDatosCitaSolo() {
                 enviarEmail();
                 $('#padre').empty();
                 $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+                $('#padre').append('<div style="width:100%; text-align:center;"><button type="button" style="margin-top:50px;" class="btn btn-info" onclick="generarPDF();">Generar PDF con la informacion</button></div>');
             }
         }
     }
+}
+function generarPDF() {
+    var doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text(35, 25, 'Datos de la cita');
+    doc.text(35, 35, 'Dia: ' + resumenDatos.dia);
+    doc.text(35, 45, 'Hora: ' + resumenDatos.hora);
+    doc.text(35, 55, 'Medico: ' + resumenDatos.medico);
+    var string = doc.output('datauristring');
+    var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>";
+    var x = window.open();
+    x.document.open();
+    x.document.write(iframe);
+    x.document.close();
 }
 function enviarEmail() {
     var respJSON = JSON.stringify(cliente);
@@ -361,6 +385,7 @@ function enviarEmail() {
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
+            alert(objetoAjax.responseText);
         }
     }
 }
@@ -383,7 +408,7 @@ function cargarDiasLibres(medico) {
     var objeto = {'medico': medico};
     var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
-    objetoAjax.open('GET', "php/GetDatosMedicos.php?json=" + json);
+    objetoAjax.open('GET', "php/GetDiasLibres.php?json=" + json);
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
@@ -541,25 +566,47 @@ function mostrarDatosEmpresa() {
     var hr = document.createElement("hr");
     hr.setAttribute("size", "1px");
     datosEmpresa.appendChild(hr);
+    var tabla = document.createElement("table");
+    tabla.setAttribute("style", "margin:0 auto;");
+    datosEmpresa.appendChild(tabla);
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/telefonoICON.png");
     img.setAttribute("class", "icon_contacto");
-    datosEmpresa.appendChild(img);
-    datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.telefono + "<br>";
+    td.appendChild(img);
+    tr.appendChild(td);
+    var td = document.createElement("td");
+    td.innerHTML = objeto.telefono;
+    tr.appendChild(td);
+    tabla.appendChild(tr);
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/EmailICON.png");
     img.setAttribute("class", "icon_contacto");
-    datosEmpresa.appendChild(img);
-    datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.correo + "<br>";
+    td.appendChild(img);
+    tr.appendChild(td);
+    var td = document.createElement("td");
+    td.innerHTML = objeto.correo;
+    tr.appendChild(td);
+    tabla.appendChild(tr);
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
     var img = document.createElement("img");
     img.setAttribute("src", "Imagenes/home-512.png");
     img.setAttribute("class", "icon_contacto");
-    datosEmpresa.appendChild(img);
-    datosEmpresa.innerHTML = datosEmpresa.innerHTML + objeto.direccion + "<br>";
+    td.appendChild(img);
+    tr.appendChild(td);
+    var td = document.createElement("td");
+    td.innerHTML = objeto.direccion;
+    tr.appendChild(td);
+    tabla.appendChild(tr);
     var divContenido = document.createElement("div");
     divContenido.setAttribute("id", "contenido");
     divContenido.appendChild(datosEmpresa);
     document.getElementById("padre").appendChild(divContenido);
+    mostrarCanvas();
 }
 /*FUNCIONES DE PANEL DE CONTROL*/
 function mostrarInterfazPanelControl() {
@@ -619,6 +666,7 @@ function mostrarInterfazPanelControl() {
     boton.innerHTML = "Aceptar";
     form.appendChild(boton);
     document.getElementById("padre").appendChild(contenido);
+    mostrarCanvas();
 }
 function compruebaDatos_inicioSesion() {
     var usuario = document.getElementById("email").value;
@@ -639,8 +687,16 @@ function compruebaDatos_inicioSesion() {
 }
 function mostrarOpcionesPanelControl() {
     $('#contenido').empty();
-    $('#contenido').append('<button onclick="reenviarADiasLibres();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Dar dias libres a medicos</button>');
-    $('#contenido').append('<button onclick="mostrarCitasMedicos();" style="margin-top:20px;" type="button" class="btn btn-success btn-lg btn-block">Ver citas de medicos</button>');
+    var div = document.createElement("div");
+    div.setAttribute("id", "darDiasLibres");
+    div.setAttribute("onclick", "reenviarADiasLibres();");
+    document.getElementById("contenido").appendChild(div);
+    $('#darDiasLibres').append("<h2>Dar dias libres a medicos</h2>");
+    var div = document.createElement("div");
+    div.setAttribute("id", "mostrarCitasMedicos");
+    div.setAttribute("onclick", "mostrarCitasMedicos();");
+    document.getElementById("contenido").appendChild(div);
+    $('#mostrarCitasMedicos').append("<h2>Ver citas de medicos</h2>");
 }
 function mostrarCitasMedicos() {
     $('#contenido').empty();
@@ -681,10 +737,9 @@ function cargarCitasMedicos(medico) {
                 var objeto = JSON.parse(datos);
                 $('#tabla_citas').remove();
                 $('#contenido').append('<table id="tabla_citas"></tabla>');
-                
                 $('#tabla_citas').append('<tr><td>cliente</td><td>dia</td><td>hora</td><tr>');
                 for (var i = 0; i < objeto.length; i++) {
-                    $('#tabla_citas').append('<tr><td>'+objeto[i].nombreUsuario+'</td><td>'+objeto[i].fecha+'</td><td>'+objeto[i].hora+'</td><tr>');
+                    $('#tabla_citas').append('<tr><td>' + objeto[i].nombreUsuario + '</td><td>' + objeto[i].fecha + '</td><td>' + objeto[i].hora + '</td><tr>');
                 }
             } else {
                 alert("datos incorrectos o inexistentes");
@@ -753,4 +808,14 @@ function pasar_a_numero(diaString) {
         default:
     }
     return diaNum;
+}
+function mostrarCanvas() {
+    var canvas = document.getElementById("canvasBackground");
+    if (canvas.style.display === "none") {
+        canvas.style.display = "block";
+    }
+}
+function ocultarCanvas() {
+    var canvas = document.getElementById("canvasBackground");
+    canvas.style.display = "none";
 }
