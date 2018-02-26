@@ -15,7 +15,7 @@ if ($consulta2) {
     }
 }
 
-$ordenSQL = "SELECT tramo.tramoInicio AS 'tramoInicio', tramo.tramoFinal AS 'tramoFinal',tramo.id AS 'id' FROM turnos,tramo,medicos, horariosmedicos WHERE turnos.id = tramo.idTurno AND horariosmedicos.idTurno = turnos.id AND medicos.id = horariosmedicos.idMedico AND medicos.nombre = '" . $datos->medico . "';";
+$ordenSQL = "SELECT tramo.tramoInicio AS 'tramoInicio', tramo.tramoFinal AS 'tramoFinal',tramo.id AS 'id' FROM turnos,tramo,medicos, horariosmedicos WHERE turnos.id = tramo.idTurno AND horariosmedicos.idTurno = turnos.id AND medicos.id = horariosmedicos.idMedico AND medicos.nombre = '" . $datos->medico. "' AND turnos.dia = '".$datos->dia."';";
 $consulta = $conexion->query($ordenSQL);
 $arrayResultado = Array();
 if ($consulta) {

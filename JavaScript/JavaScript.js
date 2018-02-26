@@ -20,6 +20,15 @@ function cargarTitulo() {
             ocultarCanvas();
         }
     }
+    var altura = window.screen.availHeight;
+    var anchura = window.screen.availWidth;
+    var canvas = document.getElementById("hero-canvas");
+    if (altura < 790) {
+        canvas.height = 910;
+    } else {
+        canvas.height = altura;
+    }
+    canvas.width = anchura;
 }
 /*FUNCIONTES CANCELAR CITA*/
 function interfazElegirOpcionConsulta() {
@@ -73,6 +82,8 @@ function comprobarLoginYmostrarCitas() {
                 }
             }
         }
+    }else{
+        alert("Por favor complete los campos");
     }
 }
 function mostrarCitasCliente(objeto) {
@@ -337,7 +348,7 @@ function guardarDatosRegistroBD() {
             } else {
                 enviarEmail();
                 $('#padre').empty();
-                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recibir un email con la confirmación</div>');
                 $('#padre').append('<div style="width:100%; text-align:center;"><button type="button" style="margin-top:50px;" class="btn btn-info" onclick="generarPDF();">Generar PDF con la informacion</button></div>');
             }
         }
@@ -357,7 +368,7 @@ function guarDatosCitaSolo() {
             } else {
                 enviarEmail();
                 $('#padre').empty();
-                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recivir un email con la confirmación</div>');
+                $('#padre').append('<div class="alert alert-success" style="width:50%; margin:0 auto; margin-top:50px;"><strong>¡Gracias!</strong>En breve deberia recibir un email con la confirmación</div>');
                 $('#padre').append('<div style="width:100%; text-align:center;"><button type="button" style="margin-top:50px;" class="btn btn-info" onclick="generarPDF();">Generar PDF con la informacion</button></div>');
             }
         }
@@ -443,7 +454,7 @@ function cargarDiasLibres(medico) {
                                     $(this).css('background-color', '#00FFBD');
                                     diaSeleccionado_objeto = $(this);
                                     diaSeleccionado_string = date.format('YYYY-MM-DD');
-                                    cargarHorarioDia(medico, diaSeleccionado_string);
+                                    cargarHorarioDia(medico, pasarAString(date.day()));
                                 }
                             }
                         }
@@ -604,6 +615,7 @@ function mostrarDatosEmpresa() {
     tabla.appendChild(tr);
     var divContenido = document.createElement("div");
     divContenido.setAttribute("id", "contenido");
+    divContenido.setAttribute("style", "width:50%;");
     divContenido.appendChild(datosEmpresa);
     document.getElementById("padre").appendChild(divContenido);
     mostrarCanvas();
@@ -687,6 +699,7 @@ function compruebaDatos_inicioSesion() {
 }
 function mostrarOpcionesPanelControl() {
     $('#contenido').empty();
+    document.getElementById("contenido").setAttribute("style", "width:70%;");
     var div = document.createElement("div");
     div.setAttribute("id", "darDiasLibres");
     div.setAttribute("onclick", "reenviarADiasLibres();");
@@ -799,15 +812,37 @@ function pasar_a_numero(diaString) {
         case 'Viernes':
             diaNum = 5;
             break;
-        case 'Sabado':
-            diaNum = 6;
-            break;
-        case 'Domingo':
-            diaNum = 0;
-            break;
         default:
     }
     return diaNum;
+}
+function pasarAString(diaNUM) {
+    var diaString = "";
+    switch (diaNUM) {
+        case 1:
+            diaString = "Lunes";
+            break;
+        case 2:
+            diaString = "Martes";
+            break;
+        case 3:
+            diaString = "Miercoles";
+            break;
+        case 4:
+            diaString = "Jueves";
+            break;
+        case 5:
+            diaString = "Viernes";
+            break;
+        case 6:
+            diaString = "Sabado";
+            break;
+        case 0:
+            diaString = "Domingo";
+            break;
+        default:
+    }
+    return diaString;
 }
 function mostrarCanvas() {
     var canvas = document.getElementById("canvasBackground");
