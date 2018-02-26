@@ -396,7 +396,6 @@ function enviarEmail() {
     objetoAjax.send();
     objetoAjax.onreadystatechange = function () {
         if (objetoAjax.readyState === 4 && objetoAjax.status === 200) {
-            alert(objetoAjax.responseText);
         }
     }
 }

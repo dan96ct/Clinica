@@ -125,7 +125,6 @@ function guardarDiasLibres() {
         alert("No has seleccionado ningun dia");
     } else {
         var nombreMedico = document.getElementById("medicos").value;
-        alert(arrayDias.length);
         var jsonDias = JSON.stringify(arrayDias);
         objetoAjax = AJAXCrearObjeto(); //crea el objeto
         objetoAjax.open('GET', "php/GuardarDiasLibresMedico.php?medico=" + nombreMedico + "&jsonDias=" + jsonDias);
