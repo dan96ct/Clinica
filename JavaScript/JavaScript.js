@@ -96,7 +96,7 @@ function mostrarCitasCliente(objeto) {
     var hr = document.createElement("hr");
     contenido.appendChild(hr);
     $('#contenido').append('<h3 style="text-align:center;">Seleccione la cita que desea cancelar</h3>');
-    $('#contenido').append('<h2 style="text-align:center;">Tenga en cuenta que solo podrá dar de baja una cita si es con un dia de antelación.</h2>');
+    $('#contenido').append('<strong style="text-align:center;">Tenga en cuenta que solo podrá dar de baja una cita si es con un dia de antelación.</strong>');
     $('#contenido').append('<select style="text-align:center; width:70%; margin:0 auto; margin-bottom:20px;" class="form-control" id="lista_diasCliente"></select>');
     for (var i = 0; i < objeto.length; i++) {
         $('#lista_diasCliente').append('<option name="' + objeto[i].id + '">' + objeto[i].nombreMedico + " " + objeto[i].fecha + " " + objeto[i].hora + "</option>");
