@@ -4,7 +4,7 @@ include_once 'conexion_bd.php';
 $json = $_REQUEST['json'];
 $datos = json_decode($json);
 
-$ordenSQL2 = "SELECT * FROM citas WHERE fecha='".$datos->dia."';";
+$ordenSQL2 = "SELECT * FROM citas WHERE fecha='".$datos->fecha."';";
 $consulta2 = $conexion->query($ordenSQL2);
 $arrayDiasCitasOcupadas = Array();
 if ($consulta2) {

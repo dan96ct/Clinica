@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `bd_clinica` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci */;
 USE `bd_clinica`;
--- MySQL dump 10.16  Distrib 10.1.28-MariaDB, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.20, for macos10.12 (x86_64)
 --
 -- Host: 127.0.0.1    Database: bd_clinica
 -- ------------------------------------------------------
--- Server version	10.1.28-MariaDB
+-- Server version	5.7.20
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,7 +40,6 @@ CREATE TABLE `bajacitas` (
 
 LOCK TABLES `bajacitas` WRITE;
 /*!40000 ALTER TABLE `bajacitas` DISABLE KEYS */;
-INSERT INTO `bajacitas` VALUES (0,'Daniel','Juan Ramon','2018-03-09 00:00:00','15:00:00');
 /*!40000 ALTER TABLE `bajacitas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +61,7 @@ CREATE TABLE `citas` (
   KEY `id_medico_idx` (`idMedico`),
   CONSTRAINT `id_medico` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `id_usuario` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +115,7 @@ CREATE TABLE `diaslibres` (
   UNIQUE KEY `fechaLibre_UNIQUE` (`fechaLibre`,`idMedico`),
   KEY `id_medico_dialibre_idx` (`idMedico`),
   CONSTRAINT `id_medico_dialibre` FOREIGN KEY (`idMedico`) REFERENCES `medicos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +176,7 @@ CREATE TABLE `horariosmedicos` (
 
 LOCK TABLES `horariosmedicos` WRITE;
 /*!40000 ALTER TABLE `horariosmedicos` DISABLE KEYS */;
-INSERT INTO `horariosmedicos` VALUES (16,5,1),(17,5,2),(18,5,19),(19,6,11),(20,6,12),(21,6,21),(22,7,16),(23,7,16),(24,7,8),(25,8,21),(26,8,22),(27,8,9),(28,9,3),(29,9,4),(30,9,14),(31,9,16),(32,10,11),(33,10,12),(34,10,17),(35,11,18),(36,11,23),(37,11,24),(38,12,6),(39,12,7),(40,12,13);
+INSERT INTO `horariosmedicos` VALUES (16,5,1),(17,5,2),(18,5,21),(19,6,11),(20,6,12),(21,6,21),(22,7,16),(23,7,16),(24,7,8),(25,8,21),(26,8,22),(27,8,9),(28,9,3),(29,9,4),(30,9,14),(31,9,16),(32,10,11),(33,10,12),(34,10,17),(35,11,18),(36,11,23),(37,11,24),(38,12,6),(39,12,7),(40,12,13);
 /*!40000 ALTER TABLE `horariosmedicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +251,7 @@ CREATE TABLE `turnos` (
   `horaInicio` time NOT NULL,
   `horaFinal` time NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,7 +260,7 @@ CREATE TABLE `turnos` (
 
 LOCK TABLES `turnos` WRITE;
 /*!40000 ALTER TABLE `turnos` DISABLE KEYS */;
-INSERT INTO `turnos` VALUES (1,'Lunes','09:00:00','12:30:00'),(2,'Lunes','12:30:00','15:00:00'),(3,'Lunes','15:00:00','18:00:00'),(4,'Lunes','18:00:00','22:00:00'),(6,'Martes','09:00:00','12:30:00'),(7,'Martes','12:30:00','15:00:00'),(8,'Martes','15:00:00','18:00:00'),(9,'Martes','18:00:00','22:00:00'),(11,'Miercoles','09:00:00','12:30:00'),(12,'Miercoles','12:30:00','15:00:00'),(13,'Miercoles','15:00:00','18:00:00'),(14,'Miercoles','18:00:00','22:00:00'),(16,'Jueves','09:00:00','12:30:00'),(17,'Jueves ','12:30:00','15:00:00'),(18,'Jueves','15:00:00','18:00:00'),(19,'Jueves ','18:00:00','22:00:00'),(21,'Viernes','09:00:00','12:30:00'),(22,'Viernes','12:30:00','15:00:00'),(23,'Viernes','15:00:00','18:00:00'),(24,'Viernes','18:00:00','22:00:00');
+INSERT INTO `turnos` VALUES (1,'Lunes','09:00:00','12:30:00'),(2,'Lunes','12:30:00','15:00:00'),(3,'Lunes','15:00:00','18:00:00'),(4,'Lunes','18:00:00','22:00:00'),(6,'Martes','09:00:00','12:30:00'),(7,'Martes','12:30:00','15:00:00'),(8,'Martes','15:00:00','18:00:00'),(9,'Martes','18:00:00','22:00:00'),(11,'Miercoles','09:00:00','12:30:00'),(12,'Miercoles','12:30:00','15:00:00'),(13,'Miercoles','15:00:00','18:00:00'),(14,'Miercoles','18:00:00','22:00:00'),(16,'Jueves','09:00:00','12:30:00'),(17,'Jueves','12:30:00','15:00:00'),(18,'Jueves','15:00:00','18:00:00'),(19,'Jueves ','18:00:00','22:00:00'),(21,'Viernes','09:00:00','12:30:00'),(22,'Viernes','12:30:00','15:00:00'),(23,'Viernes','15:00:00','18:00:00'),(24,'Viernes','18:00:00','22:00:00');
 /*!40000 ALTER TABLE `turnos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +280,7 @@ CREATE TABLE `usuarios` (
   `apellido` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`correo`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -290,7 +289,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Admin','Admin@gmail.com','13230732M','1234','');
+INSERT INTO `usuarios` VALUES (1,'Admin','Admin@gmail.com','13230732M','1234',''),(36,'Daniel','d.cebrian9@gmail.com','74524306M','abcd','Cebrian Tarancon');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,4 +310,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-25 20:31:30
+-- Dump completed on 2018-02-26 12:43:09

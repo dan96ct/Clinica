@@ -454,7 +454,7 @@ function cargarDiasLibres(medico) {
                                     $(this).css('background-color', '#00FFBD');
                                     diaSeleccionado_objeto = $(this);
                                     diaSeleccionado_string = date.format('YYYY-MM-DD');
-                                    cargarHorarioDia(medico, pasarAString(date.day()));
+                                    cargarHorarioDia(medico, pasarAString(date.day()),diaSeleccionado_string);
                                 }
                             }
                         }
@@ -481,8 +481,8 @@ function cargarDiasLibres(medico) {
     }
 
 }
-function cargarHorarioDia(medico, dia) {
-    var objeto = {'medico': medico, 'dia': dia};
+function cargarHorarioDia(medico, dia, fecha) {
+    var objeto = {'medico': medico, 'dia': dia,'fecha':fecha};
     var json = JSON.stringify(objeto);
     objetoAjax = AJAXCrearObjeto(); //crea el objeto
     objetoAjax.open('GET', "php/GetHorarioDia.php?json=" + json);
